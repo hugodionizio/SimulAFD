@@ -1,0 +1,20 @@
+Objetivo:
+Este programa é um simulador de autômatos finitos determinísticos – AFD, que permite ao usuário testar o reconhecimento de diversas cadeias para qualquer AFD de entrada.
+
+Funcionalidades:
+	O programa permite que o usuário introduza qualquer AFD, ou seja, para montar o autômato A = (Q, Σ, δ, q(0), F) o usuário deverá informar:
+		o Os estados do AFD
+		o O alfabeto do AFD
+		o As funções de transições
+		o O estado inicial
+		o Os estados de aceitação
+
+	Por simplicidade, é permitida a restrição do alfabeto a apenas 2 símbolos.
+	*Implementação de interface gráfica (estágio experimental).
+	O programa rejeita autômatos inválidos (Não determinísticos)
+	Os componentes do autômato podem ser lidos diretamente pelo console ou por um arquivo de entrada.
+
+Informações Adicionais:
+	A escolha da linguagem para a implementação do programa foi a C++.
+	Este simulador disponibiliza o código fonte e um manual de uso.
+	O manual conter toda a documentação do programa incluindo exemplos de uso.
