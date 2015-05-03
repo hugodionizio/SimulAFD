@@ -25,7 +25,12 @@ int main (int argc, char **argv) {
 			cout.put(ch);	// Grava o caractere no arquivo
 	}
 	else {
-		cout << ">.>.> " << endl;
+		int exitType = terminal();
+		if (exitType != 0) {
+			cout << "Finalização com erro do tipo " << exitType << "." << endl;
+		}
+		else
+			cout << "Finalização bem sucedida." << endl;
 	}
 
 	return (0);

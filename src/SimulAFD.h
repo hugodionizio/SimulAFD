@@ -12,4 +12,6 @@
 #include <iostream> // Para cout <<
 #include <cstring> // Para strcmp
 
+int terminal ();
+
 #endif /* SIMULAFD_H_ */

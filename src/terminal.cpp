@@ -1,11 +1,12 @@
+//#include "SimulAFD.h"
 #include <iostream>
 using namespace std;
 
 int terminal () {
-	cout << "Trabalho da disciplina de Linguagens Formais e Autômatos" << endl;
-	cout << "SimulAFD: Simulador de Autômatos Finitos Determinísticos (AFD)" << endl 
+	//cout << "Trabalho da disciplina de Linguagens Formais e Autômatos" << endl;
+	//cout << "SimulAFD: Simulador de Autômatos Finitos Determinísticos (AFD)" << endl
 
-<< endl;
+//<< endl;
 	
 	cout << "Insira a quantidade de estados do Autômato: ";
 	int i_qtEstados;
