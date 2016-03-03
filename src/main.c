@@ -1,7 +1,7 @@
 /*
- *  Projeto: SimulAFD
- *  Programa: main.cpp
- *  Função : Gerenciar porgramas
+ *  Projeto: Autômatos Finitos Deterministicos
+ *  Programa: main.c
+ *  Objetivo: Gerenciar porgramas
  *  Created on: 02/05/2015
  *      Author: Hugo Dionizio Santos
  *      		Thiago da Silveira Batista
