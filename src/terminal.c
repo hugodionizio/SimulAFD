@@ -1,48 +1,50 @@
 //#include "SimulAFD.h"
-#include <iostream>
-using namespace std;
+#include <stdio.h>
 
 int terminal () {
 	//cout << "Trabalho da disciplina de Linguagens Formais e Autômatos" << endl;
 	//cout << "SimulAFD: Simulador de Autômatos Finitos Determinísticos (AFD)" << endl
 
 //<< endl;
-	
-	cout << "Insira a quantidade de estados do Autômato: ";
 	int i_qtEstados;
-	cin >> i_qtEstados;
-
 	char c_simbolo[2];
-	cout << "Insira o primeiro símbolo do alfabeto: ";
-	cin >> c_simbolo[0];
-	cout << "Insira o segundo símbolo do alfabeto: ";
-	cin >> c_simbolo[1];
+	int **i_funcoes;
+	int i_EstadoInicial;
+	int i_qtEstadosAc;
+	int *i_EstadosAc;
+	int i;
+	
+	printf("Insira a quantidade de estados do Autômato: ");
+	scanf("%d", &i_qtEstados);
 
-	//criando a matriz
-	int **i_funcoes = new int*[i_qtEstados];
+	for (i = 0; i<2; i++) {
+		printf("Insira o %dº símbolo do alfabeto: ", i);
+		scanf("%d", &c_simbolo[i]);
+	}
+
+	// Criação da Matriz
+	i_funcoes = (int **)malloc(i_qtEstados);
 	for (int i = 0; i < i_qtEstados; i++)
-		i_funcoes[i] = new int[2];
+		i_funcoes[i] = (int *)malloc(2);
 
-	//zerando a matriz
+	// Inicialização da Matriz
 	for (int i = 0; i < i_qtEstados; i++)
 		for (int j = 0; j < 2; j++)
 			i_funcoes[i][j] = 0;
 
-	cout << "Insira as funções de transição do Autômato:" << endl;
+	printf("Insira as funções de transição do Autômato:"\n);
 	for (int i = 0; i < i_qtEstados; i++) {
 		for (int j = 0; j < 2; j++) {
-			cout << "delta(q"<<i<<", "<< c_simbolo[j] <<") = q";
-			cin >> i_funcoes[i][j];
+			printf("delta(q%d, %d) = q", i, c_simbolo[j]);
+			scanf("%d", &i_funcoes[i][j]);
 		}
 	}
 
-	cout << "Qual o estado inicial do Autômato: q";
-	int i_EstadoInicial;
-	cin >> i_EstadoInicial;
+	printf("Qual o estado inicial do Autômato: q");
+	scanf("%d", i_EstadoInicial);
 
-	cout << "Insira a quantidade de estados de aceitação do Autômato: ";
-	int i_qtEstadosAc;
-	cin >> i_qtEstadosAc;
+	printf("Insira a quantidade de estados de aceitação do Autômato: ");
+	scanf("%d", &i_qtEstadosAc);
 	int i_EstadosAc[i_qtEstadosAc];
 	for (int i = 0; i < i_qtEstadosAc; i++) {
 		if (i_qtEstadosAc == 1) {
