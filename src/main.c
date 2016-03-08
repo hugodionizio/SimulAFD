@@ -1,14 +1,12 @@
 /*
  *  Projeto: Autômatos Finitos Deterministicos
  *  Programa: main.c
- *  Objetivo: Gerenciar porgramas
- *  Created on: 02/05/2015
+ *  Objetivo: Implementar um simulador de autômatos finitos determinísticos – AFD
+ *  		que permite testar o reconhecimento de diversas cadeias para qualquer AFD de entrada.
+ *  Created on: 08/03/2016
  *      Author: Hugo Dionizio Santos
- *      		Thiago da Silveira Batista
  */
 #include "SimulAFD.h"
-
-using namespace std;
 
 // Interface do programa (Protótipos de funções)
 
@@ -17,8 +15,8 @@ int main (int argc, char **argv) {
 	char ch;
 
 // Seção de Comandos
-	cout << "1º Trabalho da disciplina de Linguagens Formais e Autômatos" << endl;
-	cout << "SimulAFD: Simulador de Autômatos Finitos determinísticos (AFD)" << endl;
+	printf ("1º Trabalho da disciplina de Linguagens Formais e Autômatos\n");
+	printf ("SimulAFD: Simulador de Autômatos Finitos determinísticos (AFD)\n");
 	if (argc > 1 && strcmp(argv[1], "--help") == 0) {
 		ifstream fin("../src/help.txt"); // Cria arquivo para a gravação em modo texto
 		while (fin.get(ch))	// Lê um caractere do teclado
@@ -27,15 +25,14 @@ int main (int argc, char **argv) {
 	else {
 		int exitType = terminal();
 		if (exitType != 0) {
-			cout << "Finalização com erro do tipo " << exitType << "." << endl;
+			printf("Finalização com erro do tipo %d.\n", exitType);
 		}
 		else
-			cout << "Finalização bem sucedida." << endl;
+			printf("Finalização bem sucedida.\n");
 	}
 
 	return (0);
 }
-
 // Funções
 
 // Fim do programa
