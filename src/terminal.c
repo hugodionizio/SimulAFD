@@ -45,37 +45,39 @@ int terminal () {
 
 	printf("Insira a quantidade de estados de aceitação do Autômato: ");
 	scanf("%d", &i_qtEstadosAc);
-	int i_EstadosAc[i_qtEstadosAc];
+	i_EstadosAc = (int *)malloc(i_qtEstadosAc);
 	for (int i = 0; i < i_qtEstadosAc; i++) {
 		if (i_qtEstadosAc == 1) {
-			cout << "Insira o estado de aceitação: q";
-			cin >> i_EstadosAc[i];
+			printf ("Insira o estado de aceitação: q");
+			scanf ("%d", &i_EstadosAc[i]);
 		} else {
-			cout << "Insira o "<<i+1<<"º estado de aceitação: q";
-			cin >> i_EstadosAc[i];
+			printf("Insira o %dº estado de aceitação: q",i+1);
+			scanf("%d", &i_EstadosAc[i]);
 		}
 	}
 
-	//imprime
+	// Impressão
 	for (int i = 0; i < 2; i++)
-		cout << " |  " << c_simbolo[i];
-	cout << " | estados " << endl;
+		printf(" |  %d, c_simbolo[i]");
+		printf(" | estados ");
 
 	for (int i = 0; i < i_qtEstados; i++) {
 		for (int j = 0; j < 2; j++) {
-			cout << " | q" << i_funcoes[i][j];
+			printf(" | q %d", i_funcoes[i][j]);
 		}
-		cout << " | q"<<i<< endl;
+		printf(" | q%d", i);
 	}
-	cout << endl << "Estado Inicial q" << i_EstadoInicial << endl << endl;
-	for (int i = 0; i < i_qtEstadosAc; i++) 
-		cout << " | " << i_EstadosAc[i];
-	cout << " | Estado(s) de aceitação"<< endl;
+	printf("Estado Inicial q %d", i_EstadoInicial);
+	for (int i = 0; i < i_qtEstadosAc; i++)
+		printf(" | %d", i_EstadosAc[i]);
+		printf(" | Estado(s) de aceitação");
 
-	//liberar memoria da linha
+	// Liberação da memória de cada linha
 	for (int i = 0; i < i_qtEstados; i++)
-		delete []i_funcoes[i];
-	//liberar memoria da matriz
-	delete []i_funcoes;
+		free(i_funcoes[i]);
+		
+	// Liberação da matriz da memória
+	free(i_funcoes);
+	
 	return 0;
 }
