@@ -9,8 +9,8 @@
 #include <string.h>
 
 void criarAutomato(Automato *aut) {
-	criarAlfabeto(&aut->a);
 	criarEstado(&aut->e);
+	criarAlfabeto(&aut->a);
 	criarFuncoes(&aut->t, aut->e, aut->a);
 	inicializarFuncoes(&aut->t);
 	definirFuncoes(&aut->t, aut->a);

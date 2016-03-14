@@ -1,5 +1,6 @@
 //#include "SimulAFD.h"
 #include <stdio.h>
+#include "Automato.h"
 
 int terminal () {
 	//cout << "Trabalho da disciplina de Linguagens Formais e Autômatos" << endl;
@@ -16,6 +17,10 @@ int terminal () {
 	char seq[80];
 	int i, j, tam;
 	
+	Automato aut;
+	criarAutomato(&aut);
+	imprimirAutomato(aut);
+
 	// Dimensionando estados do Autômato
 	printf("Insira a quantidade de estados do Autômato: ");
 	scanf("%d", &numEstados);

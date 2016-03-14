@@ -9,8 +9,9 @@
 
 void criarAlfabeto(Alfabeto *a) {
 	int i;
+	a->numSimbolos = 2;
 
-	a->simbolos = (int *)malloc(2);
+	a->simbolos = (int *)malloc(a->numSimbolos);
 	for (i = 0; i < a->numSimbolos; i++) {
 			printf("Insira o %dº símbolo do alfabeto: ", (i+1));
 			scanf("%d", &a->simbolos[i]);
