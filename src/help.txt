@@ -15,6 +15,6 @@ Funcionalidades:
 	Os componentes do autômato podem ser lidos diretamente pelo console ou por um arquivo de entrada.
 
 Informações Adicionais:
-	A escolha da linguagem para a implementação do programa foi a C++.
+	A escolha da linguagem para a implementação do programa foi a C.
 	Este simulador disponibiliza o código fonte e um manual de uso.
 	O manual conter toda a documentação do programa incluindo exemplos de uso.
