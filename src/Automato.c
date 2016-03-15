@@ -7,6 +7,7 @@
 
 #include "Automato.h"
 #include <string.h>
+#include <math.h>
 
 void criarAutomato(Automato *aut) {
 	// Dimensionando estados do Autômato
@@ -27,13 +28,52 @@ void criarAutomato(Automato *aut) {
 	selecionarEstadosFinais(&aut->e);
 }
 
-void verificarSequencia(Automato aut, char *seq) {
-	int tam = strlen(seq);
+void verificarAutomato(Automato aut) {
+	int i, j, topo, count = 0;
+	int *estadosVerificados;
 
-	if (seq[tam] == aut.e.estadosFinais[aut.e.numEstadosFinais])
+	estadosVerificados = (int *)malloc(aut.e.numEstados);
+
+	for (i = 0; i < aut.e.numEstados; ++i) {
+		estadosVerificados[i] = -1;
+	}
+
+	estadosVerificados[0] = aut.e.estadoInicial;
+	topo = 0;
+	i = estadosVerificados[0];
+	while(topo < aut.e.numEstados && count < pow((double)2, (double)aut.e.numEstados)) {
+		for (j = 0; j < aut.a.numSimbolos; ++j) {
+			if(aut.t.funcoes[i][j] != i) {
+				i = aut.t.funcoes[i][j];
+
+				if(buscaSequencial(i, aut.e.numEstados, estadosVerificados) == aut.e.numEstados) {
+					estadosVerificados[topo+1] = i;
+					topo++;
+				}
+			}
+			count++;
+		}
+	}
+
+	if (topo == aut.e.numEstados)
 		printf("O autômato é um AFD\n");
 	else
 		printf("O autômato não é um AFD\n");
+
+}
+
+void verificarSequencia(Automato aut, char *seq) {
+	int i, j = aut.e.estadoInicial;
+	int tam = strlen(seq);
+
+	for (i = 0; i < tam; ++i) {
+		j = aut.t.funcoes[j][seq[i]];
+	}
+
+	if (buscaSequencial(j, aut.e.numEstadosFinais, aut.e.estadosFinais) < aut.e.numEstadosFinais)
+		printf("Essa sequência pertence ao AFD");
+	else
+		printf("Essa sequência não pertence ao AFD\n");
 }
 
 // Impressão

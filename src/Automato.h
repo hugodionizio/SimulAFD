@@ -20,7 +20,10 @@ struct Automato {
 typedef struct Automato Automato;
 
 void criarAutomato(Automato *);
+void verificarAutomato(Automato);
 void verificarSequencia(Automato, char *);
 void imprimirAutomato(Automato);
+
+int buscaSequencial (int, int, int *);
 
 #endif /* SRC_AUTOMATO_H_ */

@@ -8,6 +8,7 @@ int terminal () {
 	
 	Automato aut;
 	criarAutomato(&aut);
+	verificarAutomato(aut);
 
 	printf("Informe a sequência de símbolos: ");
 	scanf("%s", &seq);
