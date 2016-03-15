@@ -22,6 +22,7 @@ typedef struct Transicao Transicao;
 void criarFuncoes(Transicao *, Estado, Alfabeto);
 void inicializarFuncoes(Transicao *);
 void definirFuncoes(Transicao *, Alfabeto);
+void liberarFuncoes(Transicao *);
 void imprimirFuncoes(Transicao, Alfabeto);
 
 #endif /* SRC_TRANSICAO_H_ */

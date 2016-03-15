@@ -37,6 +37,18 @@ void definirFuncoes(Transicao *t, Alfabeto a) {
 	}
 }
 
+// Liberar Funções da Memória Principal
+void liberarFuncoes(Transicao *t) {
+	int i;
+
+	//  Liberação da memória de cada linha
+	for (i = 0; i < t->numEstados; i++)
+		free(t->funcoes[i]);
+
+	//  Liberação da matriz da memória principal
+	free(t->funcoes);
+}
+
 void imprimirFuncoes(Transicao t, Alfabeto a) {
 	int i, j;
 	for (i = 0; i < t.numEstados; i++) {
