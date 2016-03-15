@@ -43,14 +43,18 @@ void imprimirEstados(Estado e) {
 }
 
 void imprimirEstadoInicial(Estado e) {
-	printf("\nEstado Inicial q%d\n\n", e.estadoInicial);
+	printf("\n\nq%d é o Estado Inicial.\n", e.estadoInicial);
 }
 
 void imprimirEstadosFinais(Estado e) {
 	int i;
 
+	printf("F = {");
 	for (i = 0; i < e.numEstadosFinais; i++) {
-		printf(" | %d ", e.estadosFinais[i]);
-		printf("| Estado(s) de aceitação");
+		printf("%d", e.estadosFinais[i]);
+		if(i+1 < e.numEstadosFinais)
+			printf(", ");
 	}
+	//		printf("| Estado(s) de aceitação");
+	printf("}.");
 }

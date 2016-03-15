@@ -49,12 +49,31 @@ void liberarFuncoes(Transicao *t) {
 	free(t->funcoes);
 }
 
-void imprimirFuncoes(Transicao t, Alfabeto a) {
+void imprimirFuncoes(Transicao t, Alfabeto a, Estado e) {
 	int i, j;
 	for (i = 0; i < t.numEstados; i++) {
+		printf("\n |");
+		if (i == e.estadoInicial)
+			printf("  ->");
+		else printf("  ");
+		if (buscaSequencial(i, e.numEstadosFinais, e.estadosFinais) < e.numEstadosFinais) {
+			if(i == e.estadoInicial)
+				printf("*");
+			else
+				printf(" *");
+		}
+		else {
+			if(i != e.estadoInicial)
+				printf(" ");
+		}
+		if (i != e.estadoInicial &&
+				buscaSequencial(i, e.numEstadosFinais, e.estadosFinais) >=
+					e.numEstadosFinais)
+			printf(" ");
+		printf("q%d  ", i);
 		for (j = 0; j < a.numSimbolos; j++) {
 			printf(" | q%d", t.funcoes[i][j]);
 		}
-		printf(" | q%d\n", i);
+		printf(" |");
 	}
 }

@@ -23,6 +23,6 @@ void criarFuncoes(Transicao *, Estado, Alfabeto);
 void inicializarFuncoes(Transicao *);
 void definirFuncoes(Transicao *, Alfabeto);
 void liberarFuncoes(Transicao *);
-void imprimirFuncoes(Transicao, Alfabeto);
+void imprimirFuncoes(Transicao, Alfabeto, Estado);
 
 #endif /* SRC_TRANSICAO_H_ */

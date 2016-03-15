@@ -55,7 +55,7 @@ void verificarAutomato(Automato aut) {
 		}
 	}
 
-	if (topo == aut.e.numEstados)
+	if (topo < aut.e.numEstados)
 		printf("O autômato é um AFD\n");
 	else
 		printf("O autômato não é um AFD\n");
@@ -70,21 +70,22 @@ void verificarSequencia(Automato aut, char *seq) {
 		j = aut.t.funcoes[j][seq[i]];
 	}
 
-	if (buscaSequencial(j, aut.e.numEstadosFinais, aut.e.estadosFinais) < aut.e.numEstadosFinais)
-		printf("Essa sequência pertence ao AFD");
+	if (buscaSequencial(j, aut.e.numEstadosFinais, aut.e.estadosFinais) >= aut.e.numEstadosFinais)
+		printf("Essa sequência pertence ao AFD.\n");
 	else
-		printf("Essa sequência não pertence ao AFD\n");
+		printf("Essa sequência não pertence ao AFD.\n");
 }
 
 // Impressão
 void imprimirAutomato(Automato aut) {
 
 	//  Alfabeto e cabeçalho "estados"
+	printf(" | estados");
 	imprimirAlfabeto(aut.a);
-	printf(" | estados \n");
+	printf(" |");
 
 	//  Funções de transição
-	imprimirFuncoes(aut.t, aut.a);
+	imprimirFuncoes(aut.t, aut.a, aut.e);
 
 	//  Estados Inicial e Finais
 	imprimirEstadoInicial(aut.e);
