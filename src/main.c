@@ -1,12 +1,12 @@
 /*
- *  Projeto: Autômatos Finitos Deterministicos
+ *  Projeto: Minimizador de Autômatos Finitos Deterministicos
  *  Programa: main.c
- *  Objetivo: Implementar um simulador de autômatos finitos determinísticos – AFD
- *  		que permite testar o reconhecimento de diversas cadeias para qualquer AFD de entrada.
- *  Created on: 08/03/2016
+ *  Objetivo: Implementar o algoritmo estudado em sala de aula
+ *  			para minimização de autômatos.
+ *  Created on: 22/04/2016
  *      Author: Hugo Dionizio Santos
  */
-#include "CSimulAFD.h"
+#include "MinimizadorAFD.h"
 #define TAMBUFF 1024 /* tamanho do buffer */
 char buff[TAMBUFF + 1];
 
@@ -19,8 +19,8 @@ int main (int argc, char **argv) {
 	int fd, BytesLidos;
 
 // Seção de Comandos
-	printf ("1º Trabalho da disciplina de Linguagens Formais e Autômatos\n");
-	printf ("CSimulAFD: Simulador de Autômatos Finitos determinísticos (AFD)\n");
+	printf ("2º Trabalho da disciplina de Linguagens Formais e Autômatos\n");
+	printf ("MinimizadorAFD: Minimizador de Autômatos Finitos determinísticos (AFD)\n");
 	if (argc > 1 && strcmp(argv[1], "--help") == 0) {
 
 		if(argc !=2) {

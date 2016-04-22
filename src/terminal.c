@@ -1,4 +1,4 @@
-//#include "SimulAFD.h"
+//#include "MinimizadorAFD.h"
 #include <stdio.h>
 #include "Automato.h"
 

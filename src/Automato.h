@@ -8,6 +8,7 @@
 #ifndef SRC_AUTOMATO_H_
 #define SRC_AUTOMATO_H_
 
+#include <math.h>
 #include "Alfabeto.h"
 #include "Estado.h"
 #include "Transicao.h"
