@@ -1,0 +1,6 @@
+O programa permite que o usuário introduza um AFD com todos os pré-requisitos para que possa ser minimizado:
+Aceita apenas AFDs de entrada;
+Não aceita AFD com estados inacessíveis;
+Aceita apenas AFD total.
+Por simplicidade, restrige o alfabeto a apenas 2 símbolos.
+Os componentes do autômato são lidos diretamente pelo console e/ou por um arquivo de entrada.
