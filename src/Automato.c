@@ -13,22 +13,24 @@ void criarAutomato(Automato *aut) {
 	// Dimensionando estados do Autômato
 	criarEstado(&aut->e);
 
-	// Definindo simbologia do Alfabeto
-	criarAlfabeto(&aut->a);
+	if (aut->e.numEstados > 0) {
+		// Definindo simbologia do Alfabeto
+		criarAlfabeto(&aut->a);
 
-	// Criação da Matriz de Funções de Transições
-	criarFuncoes(&aut->t, aut->e, aut->a);
+		// Criação da Matriz de Funções de Transições
+		criarFuncoes(&aut->t, aut->e, aut->a);
 
-	// Inicialização da Matriz
-	inicializarFuncoes(&aut->t);
+		// Inicialização da Matriz
+		inicializarFuncoes(&aut->t);
 
-	// Construção do Autômato
-	definirFuncoes(&aut->t, aut->a);
-	selecionarEstadoInicial(&aut->e);
-	selecionarEstadosFinais(&aut->e);
+		// Construção do Autômato
+		definirFuncoes(&aut->t, aut->a);
+		selecionarEstadoInicial(&aut->e);
+		selecionarEstadosFinais(&aut->e);
+	}
 }
 
-void verificarAutomato(Automato aut) {
+bool verificarAutomato(Automato aut) {
 	int i, j, topo, count = 0;
 	int *estadosVerificados;
 
@@ -55,11 +57,14 @@ void verificarAutomato(Automato aut) {
 		}
 	}
 
-	if (topo < aut.e.numEstados)
+	if (topo < aut.e.numEstados) {
 		printf("O autômato é um AFD\n");
-	else
+		return true;
+	}
+	else {
 		printf("O autômato não é um AFD\n");
-
+		return false;
+	}
 }
 
 void verificarSequencia(Automato aut, char *seq) {

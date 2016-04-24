@@ -13,6 +13,16 @@
 #include "Estado.h"
 #include "Transicao.h"
 
+// Estruturas de Dados
+# ifndef __cplusplus
+// Lógico
+enum bool {
+	false,
+	true
+};
+typedef enum bool bool;
+#endif
+
 struct Automato {
 	Alfabeto a;
 	Estado e; // Conjunto de Estados, Estado Inicial e Estados Finais
@@ -21,7 +31,7 @@ struct Automato {
 typedef struct Automato Automato;
 
 void criarAutomato(Automato *);
-void verificarAutomato(Automato);
+bool verificarAutomato(Automato);
 void verificarSequencia(Automato, char *);
 void imprimirAutomato(Automato);
 

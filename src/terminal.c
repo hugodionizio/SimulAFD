@@ -8,13 +8,23 @@ int terminal () {
 	
 	Automato aut;
 	criarAutomato(&aut);
-	verificarAutomato(aut);
+	do {
+		verificarAutomato(aut);
 
-	printf("Informe a sequência de símbolos: ");
-	scanf("%s", &seq);
-	verificarSequencia(aut, seq);
+		if (aut.e.numEstados > 0) {
+			printf("Informe a sequência de símbolos: ");
+			do {
+				scanf("%s", &seq);
+				verificarSequencia(aut, seq);
 
-	imprimirAutomato(aut);
+				imprimirAutomato(aut);
+				printf("Informe outra sequência: ");
+			} while (strlen(seq) > 0);
+
+			printf("Criando novo autômato...\n");
+			criarAutomato(&aut);
+		}
+	} while (aut.e.numEstados > 0);
 
 	return 0;
 }
