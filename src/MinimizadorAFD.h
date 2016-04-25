@@ -14,6 +14,22 @@
 #include <stdlib.h> // Para cout <<
 #include <string.h> // Para strcmp
 
+#include "Automato.h"
+
+struct Tabela {
+	char **t;
+};
+typedef struct Tabela Tabela;
+
+
 int terminal ();
+
+// Funções de minimização
+void construirTabela(Automato *, Tabela *);
+void marcarEstadosObviamenteNaoEquivalentes(Automato *, Tabela *);
+void marcarEstadosNaoEquivalentes(Automato *, Tabela *, int *);
+void unificarEstadosEquivalentes(Automato *, int *, int*);
+void excluirEstadosInuteis(Automato *);
+bool minimizarAutomato(Automato *);
 
 #endif /* SIMULAFD_H_ */

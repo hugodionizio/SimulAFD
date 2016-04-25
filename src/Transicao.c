@@ -5,6 +5,7 @@
  *      Author: hugo
  */
 
+#include <stdlib.h>
 #include "Transicao.h"
 
 void criarFuncoes(Transicao *t, Estado e, Alfabeto a) {
@@ -12,27 +13,28 @@ void criarFuncoes(Transicao *t, Estado e, Alfabeto a) {
 	t->numEstados = e.numEstados;
 	t->numSimbolos = a.numSimbolos;
 
-	t->funcoes = (int **)malloc(t->numEstados);
+	t->funcoes = (char **)malloc(t->numEstados*sizeof(char));
 	for (i = 0; i < t->numEstados; i++)
-		t->funcoes[i] = (int *)malloc(t->numSimbolos);
+		t->funcoes[i] = (char *)malloc(t->numSimbolos*sizeof(char));
 }
 
 void inicializarFuncoes(Transicao *t) {
 	int i, j;
 
-	for (i = 0; i < t->numEstados; i++)
+	for (i = 0; i < t->numEstados; i++) {
 		for (j = 0; j < t->numSimbolos; j++)
-			t->funcoes[i][j] = 0;
+			t->funcoes[j][i] = ' ';
+	}
 }
 
-void definirFuncoes(Transicao *t, Alfabeto a) {
+void definirFuncoes(Transicao *t, Estado e, Alfabeto a) {
 	int i, j;
 
 	printf("Insira as funções de transição do Autômato:\n");
 	for (i = 0; i < t->numEstados; i++) {
 		for (j = 0; j < t->numSimbolos; j++) {
-			printf("delta(q%d, %d) = q", i, a.simbolos[j]);
-			scanf("%d", &t->funcoes[i][j]);
+			printf("delta(%c%d, %c) = %c",e.representacao, i, a.simbolos[j], e.representacao);
+			scanf(" %c", &t->funcoes[j][i]);
 		}
 	}
 }
@@ -54,7 +56,7 @@ void imprimirFuncoes(Transicao t, Alfabeto a, Estado e) {
 	for (i = 0; i < t.numEstados; i++) {
 		printf("\n |");
 		if (i == e.estadoInicial)
-			printf("  ->");
+			printf(" ->");
 		else printf("  ");
 		if (buscaSequencial(i, e.numEstadosFinais, e.estadosFinais) < e.numEstadosFinais) {
 			if(i == e.estadoInicial)
@@ -70,9 +72,9 @@ void imprimirFuncoes(Transicao t, Alfabeto a, Estado e) {
 				buscaSequencial(i, e.numEstadosFinais, e.estadosFinais) >=
 					e.numEstadosFinais)
 			printf(" ");
-		printf("q%d  ", i);
+		printf("%c%d  ",e.representacao, i);
 		for (j = 0; j < a.numSimbolos; j++) {
-			printf(" | q%d", t.funcoes[i][j]);
+			printf(" | %c%c",e.representacao, t.funcoes[j][i]);
 		}
 		printf(" |");
 	}

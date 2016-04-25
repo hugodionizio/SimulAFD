@@ -23,8 +23,8 @@ void criarAutomato(Automato *aut) {
 		// Inicialização da Matriz
 		inicializarFuncoes(&aut->t);
 
-		// Construção do Autômato
-		definirFuncoes(&aut->t, aut->a);
+		// Construção do Autômatofor
+		definirFuncoes(&aut->t, aut->e, aut->a);
 		selecionarEstadoInicial(&aut->e);
 		selecionarEstadosFinais(&aut->e);
 	}
@@ -34,7 +34,7 @@ bool verificarAutomato(Automato aut) {
 	int i, j, topo, count = 0;
 	int *estadosVerificados;
 
-	estadosVerificados = (int *)malloc(aut.e.numEstados);
+	estadosVerificados = (int *)malloc(aut.e.numEstados*sizeof(int));
 
 	for (i = 0; i < aut.e.numEstados; ++i) {
 		estadosVerificados[i] = -1;
@@ -45,8 +45,8 @@ bool verificarAutomato(Automato aut) {
 	i = estadosVerificados[0];
 	while(topo < aut.e.numEstados && count < pow((double)2, (double)aut.e.numEstados)) {
 		for (j = 0; j < aut.a.numSimbolos; ++j) {
-			if(aut.t.funcoes[i][j] != i) {
-				i = aut.t.funcoes[i][j];
+			if(aut.t.funcoes[j][i] != i) {
+				i = aut.t.funcoes[j][i];
 
 				if(buscaSequencial(i, aut.e.numEstados, estadosVerificados) == aut.e.numEstados) {
 					estadosVerificados[topo+1] = i;

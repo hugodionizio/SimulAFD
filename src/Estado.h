@@ -12,9 +12,10 @@ struct Estado {
 	int numEstados;
 	int *estados;
 
+	char representacao;
 	int estadoInicial;
 	int numEstadosFinais;
-	int **estadosFinais;
+	int *estadosFinais;
 };
 typedef struct Estado Estado;
 

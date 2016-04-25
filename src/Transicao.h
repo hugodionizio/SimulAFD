@@ -15,13 +15,13 @@ struct Transicao {
 	int numSimbolos;
 	int numEstados;
 
-	int **funcoes;
+	char **funcoes;
 };
 typedef struct Transicao Transicao;
 
 void criarFuncoes(Transicao *, Estado, Alfabeto);
 void inicializarFuncoes(Transicao *);
-void definirFuncoes(Transicao *, Alfabeto);
+void definirFuncoes(Transicao *, Estado, Alfabeto);
 void liberarFuncoes(Transicao *);
 void imprimirFuncoes(Transicao, Alfabeto, Estado);
 

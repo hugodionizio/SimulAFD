@@ -1,6 +1,7 @@
 //#include "MinimizadorAFD.h"
 #include <stdio.h>
 #include "Automato.h"
+#include "MinimizadorAFD.h"
 
 int terminal () {
 	char seq[80];
@@ -12,17 +13,21 @@ int terminal () {
 		verificarAutomato(aut);
 
 		if (aut.e.numEstados > 0) {
-			printf("Informe a sequência de símbolos: ");
-			do {
-				scanf("%s", &seq);
-				verificarSequencia(aut, seq);
+			imprimirAutomato(aut);
 
-				imprimirAutomato(aut);
-				printf("Informe outra sequência: ");
-			} while (strlen(seq) > 0);
+			if (minimizarAutomato(&aut)) {
+				printf("Informe a sequência de símbolos: ");
+				do {
+					scanf("%s", &seq);
+					verificarSequencia(aut, seq);
 
-			printf("Criando novo autômato...\n");
-			criarAutomato(&aut);
+					imprimirAutomato(aut);
+					printf("Informe outra sequência: ");
+				} while (strlen(seq) > 0);
+
+				printf("Criando novo autômato...\n");
+				criarAutomato(&aut);
+			}
 		}
 	} while (aut.e.numEstados > 0);
 

@@ -11,7 +11,7 @@
 struct Alfabeto {
 	int numSimbolos;
 
-	int *simbolos;
+	char *simbolos;
 };
 typedef struct Alfabeto Alfabeto;
 
