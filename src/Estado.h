@@ -20,6 +20,7 @@ struct Estado {
 typedef struct Estado Estado;
 
 void criarEstado(Estado *);
+void inicializarEstado(Estado *);
 void selecionarEstadoInicial(Estado *);
 void selecionarEstadosFinais(Estado *);
 void imprimirEstados(Estado e);

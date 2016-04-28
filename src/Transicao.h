@@ -15,7 +15,7 @@ struct Transicao {
 	int numSimbolos;
 	int numEstados;
 
-	char **funcoes;
+	int **funcoes;
 };
 typedef struct Transicao Transicao;
 

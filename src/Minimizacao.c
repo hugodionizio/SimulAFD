@@ -6,7 +6,9 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #include "Automato.h"
+#include "MinimizadorAFD.h"
 
 // Uma conseqüência do teste de equivalência é que podemos encontrar AFD’s <<equivalentes>> que contenham um <<número mínimo de estados>>.
 bool equilvalenciaAutomatos(Automato a, Automato b) {
@@ -70,19 +72,16 @@ void gerarAutomatoEquivalente(Automato *automato) {
 	transformarDeltaParaTotal(automato);
 }
 
-struct Tabela {
-	char **t;
-};
-typedef struct Tabela Tabela;
-
 // Função principal de Minimização de Autômatos
 bool minimizarAutomato(Automato *automato) {
-	printf("Minimizando autômato...\n");
-//	char **tabela;
-	int *lista_q[2];
+	Tabela tabela;
+	Lista lista;
+	//	char **tabela;
+	int *lista_q[4];
 	int *listaParesNaoFinais[2];
 	int *listaParesFinais[2];
-	Tabela tabela;
+
+	printf("Minimizando autômato...\n");
 
 	if (verificarAFD(*automato) == true) {
 		printf("O autômato é um AFD, pronto para ser minimizado.\n");
@@ -93,7 +92,7 @@ bool minimizarAutomato(Automato *automato) {
 	// Algoritmo de Preenchimento de Tabela
 	construirTabela(automato, &tabela);
 	marcarEstadosObviamenteNaoEquivalentes(automato, &tabela);
-	marcarEstadosNaoEquivalentes(automato, &tabela, lista_q);
+	marcarEstadosNaoEquivalentes(automato, &tabela, &lista);
 	unificarEstadosEquivalentes(automato, listaParesNaoFinais,
 			listaParesFinais);
 	excluirEstadosInuteis(automato);
@@ -112,7 +111,8 @@ void construirTabela(Automato *automato, Tabela *tabela) {
 	tabela->t = (char **) malloc(automato->e.numEstados * sizeof(char*));
 
 	for (count = 0; count < automato->e.numEstados; count++) {
-		tabela->t[count] = (char *) malloc(automato->e.numEstados * sizeof(char));
+		tabela->t[count] = (char *) malloc(
+				automato->e.numEstados * sizeof(char));
 	}
 
 	for (count = 0; count < automato->e.numEstados; count++) {
@@ -122,9 +122,10 @@ void construirTabela(Automato *automato, Tabela *tabela) {
 	}
 }
 
+// Funções da Etapa 2
 bool eEstadoFinal(int x, Estado e) {
-	if (buscaSequencial(x, e.numEstadosFinais,
-			e.estadosFinais) < e.numEstadosFinais)
+	if (buscaSequencial(x, e.numEstadosFinais, e.estadosFinais)
+			< e.numEstadosFinais)
 		return true;
 	else
 		return false;
@@ -135,11 +136,19 @@ void imprimirTabela(Automato automato, Tabela tabela) {
 
 	for (count = 0; count < automato.e.numEstados; count++) {
 		for (count2 = 0; count2 < automato.e.numEstados; count2++) {
-			if (count == 0) {
-				printf("%c%d", automato.e.representacao, count2);
-			}
-			else {
-				printf("%c", tabela.t[count2][count]);
+			if (count == 0 && count2 == 0)
+				printf("   ");
+			else if (count2 == 0 && count != 0)
+				printf("%c%d ", automato.e.representacao,
+						automato.e.estados[count]);
+
+			if (count2 != automato.e.numEstados - 1) {
+				if (count == 0) {
+					printf("%c%d", automato.e.representacao,
+							automato.e.estados[count2]);
+				} else {
+					printf("%c", tabela.t[count2][count]);
+				}
 			}
 
 			if (count2 + 1 < automato.e.numEstados)
@@ -161,34 +170,59 @@ void marcarEstadosObviamenteNaoEquivalentes(Automato *automato,
 
 	for (count = 0; count < automato->e.numEstados; count++) {
 		for (count2 = 0; count2 < automato->e.numEstados; count2++) {
-			if (eEstadoFinal(count, automato->e) != eEstadoFinal(count2, automato->e))
+			if (eEstadoFinal(count, automato->e)
+					!= eEstadoFinal(count2, automato->e))
 				estadoObvNaoEquivalentes->t[count2][count] = 'X';
-			else if (count == count2)
+			else if (count == count2) {
 				break;
+			} else if (estadoObvNaoEquivalentes->t[count2][count] == ' ')
+				estadoObvNaoEquivalentes->t[count2][count] = '-';
 		}
 	}
 
 	imprimirTabela(*automato, *estadoObvNaoEquivalentes);
 }
 
-bool estaMarcado(Automato *automato, Tabela *estadoObvNaoEquivalentes,
-		int *lista[2], int p, int pl) {
-	int i, j;
+// Funções da Etapa 3
+int delta(Automato automato, int estado, char transicao) {
+	int posEstado, posSimbolo;
+	char * pch;
+	int i;
+	char str[automato.a.numSimbolos];
+
+	for (i = 0; i < automato.a.numSimbolos; ++i) {
+		str[i] = automato.a.simbolos[i];
+	}
+//	str[automato.a.numSimbolos] = '\0';
+
+	posEstado = buscaSequencial(estado, automato.e.numEstados,
+			automato.e.estados);
+	pch = strchr(str, transicao);
+	posSimbolo = pch - &transicao + 24;
+
+	return automato.t.funcoes[posSimbolo][posEstado];
+}
+
+bool estaMarcado(Automato automato, Tabela tabela, int p, int pl) {
+	int posP, posPl;
 
 	printf("Verificando se o par {p, p'} está marcado...\n");
 
-	if (estadoObvNaoEquivalentes->t[p][pl] == "X")
+	posP = buscaSequencial(p, automato.e.numEstados, automato.e.estados);
+	posPl = buscaSequencial(pl, automato.e.numEstados, automato.e.estados);
+
+	if (tabela.t[posPl][posP] == 'X')
 		return true;
 	else
 		return false;
 }
 
-void marcar(int *lista[2], int q, int ql) {
+void marcar(int *lista[4], int q, int ql) {
 	printf("Incluindo par {q, q'} em uma lista...\n");
 
 }
 
-bool encabeca(int *lista_q[2], int q, int ql) {
+bool encabeca(int *lista_q[4], int q, int ql) {
 	printf("Verificando se o par {q, q'} encabeça a lista...\n");
 
 	return true;
@@ -196,34 +230,67 @@ bool encabeca(int *lista_q[2], int q, int ql) {
 
 // 3. Marcar estados não equivalentes. Para cada par {q, q’} e para cada símbolo 'a' pertencente a um alfabeto (Sigma), suponha que delta(q, a) = p e delta(q’, a) = p’ e:
 void marcarEstadosNaoEquivalentes(Automato *automato, Tabela *tabela,
-		int *lista_q[2]) {
+		Lista *lista) {
+	int *lista_q[4];
 	int p, pl;
-	int *q, *ql;
-	int a;
+	int q, ql;
+	char a;
+	int i;
+	int j = 0;
 
 	printf("Marcando Estados Não Equivalentes...\n");
 
+//	p = delta(*automato, q, a);
+//	pl = delta(*automato, ql, a);
 	// a) Se <<p = p’>>, então <<q é equivalente a q’ para a e não deve ser marcado>>;
-	if (p == pl) {
+	//if (p == pl) {
+	//}
+
+	for (i = 0; i < 4; ++i) {
+		lista->l[i] = (int *)malloc(automato->e.numEstados*sizeof(int));
 	}
 
 	// b) Se <<p != p’>> e o par <<{p, p’} não está marcado>>, então {q, q’} é incluído em uma lista para posterior análise;
-	if (p != pl && !estaMarcado(automato, tabela, *lista_q, p, pl)) {
-		lista_q[p][pl] = 1;
+	for (q = 0; q < automato->e.numEstados; q++) {
+		for (ql = 1; ql < automato->e.numEstados; ql++) {
+			if (q != ql) {
+				for (i = 0; i < automato->a.numSimbolos; ++i) {
+					a = automato->a.simbolos[i];
+					p = delta(*automato, q, a);
+					pl = delta(*automato, ql, a);
+
+					if (p != pl && !estaMarcado(*automato, *tabela, p, pl)) {
+						lista->l[0][j] = p;
+						lista->l[1][j] = pl;
+						lista->l[2][j] = q;
+						lista->l[3][j] = ql;
+
+						printf("[{%c%d,%c%d},{%c%d,%c%d}]\n",
+								automato->e.representacao, lista->l[0][j],
+								automato->e.representacao, lista->l[1][j],
+								automato->e.representacao, lista->l[2][j],
+								automato->e.representacao, lista->l[3][j]);
+						j++;
+					}
+				}
+			}
+		}
 	}
+	imprimirTabela(*automato, *tabela);
 
 	// c) Se <<p != p’>> e o par <<{p, p’} está marcado>>:
-	if (p != p && estaMarcado(automato, tabela, *lista_q, p, pl)) {
+	if (p != p && estaMarcado(*automato, *tabela, p, pl)) {
 		// * {q, q’} não é equivalente e deve ser marcado;
-		marcar(&lista_q, q, ql);
+		marcar(&lista->l, q, ql);
 
-		// * Se {q,q’} encabeça uma lista de pares, então marcar todos os pares da lista.
-		if (encabeca(lista_q, q, ql)) {
-			marcarTodosPares(&lista_q);
+		// * Se {count,count’} encabeça uma lista de pares, então marcar todos os pares da lista.
+		if (encabeca(lista->l, q, ql)) {
+			marcarTodosPares(&lista->l);
 		}
 	}
 }
 
+// Funções da Etapa 4
 // * A equivalência é transitiva;
 bool eEquivalenciaTransitiva(int p, int pl) {
 	printf("Verificando se Equivalência é transitiva...\n");

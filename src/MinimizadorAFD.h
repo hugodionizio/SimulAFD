@@ -21,14 +21,20 @@ struct Tabela {
 };
 typedef struct Tabela Tabela;
 
+struct Lista {
+	int fim;
+
+	int *l[4];
+};
+typedef struct Lista Lista;
 
 int terminal ();
 
 // Funções de minimização
 void construirTabela(Automato *, Tabela *);
 void marcarEstadosObviamenteNaoEquivalentes(Automato *, Tabela *);
-void marcarEstadosNaoEquivalentes(Automato *, Tabela *, int *);
-void unificarEstadosEquivalentes(Automato *, int *, int*);
+void marcarEstadosNaoEquivalentes(Automato *, Tabela *, Lista *);
+void unificarEstadosEquivalentes(Automato *, int *[2], int *[2]);
 void excluirEstadosInuteis(Automato *);
 bool minimizarAutomato(Automato *);
 

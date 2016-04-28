@@ -13,6 +13,17 @@ void criarEstado(Estado *e) {
 
 	printf("Informe a quantidade de estados do Autômato: ");
 	scanf("%d", &e->numEstados);
+	e->estados = (int *)malloc(e->numEstados*sizeof(int));
+
+	inicializarEstado(e);
+}
+
+void inicializarEstado(Estado *e) {
+	int i;
+
+	for (i = 0; i < e->numEstados; ++i) {
+		e->estados[i] = i;
+	}
 }
 
 void selecionarEstadoInicial(Estado *e) {
@@ -24,7 +35,7 @@ void selecionarEstadosFinais(Estado *e) {
 	int i;
 	printf("Insira a quantidade de estados de aceitação do Autômato: ");
 	scanf("%d", &e->numEstadosFinais);
-	e->estadosFinais = (int *)malloc(e->numEstadosFinais);
+	e->estadosFinais = (int *)malloc(e->numEstadosFinais*sizeof(int));
 	for (i = 0; i < e->numEstadosFinais; i++) {
 		if (e->numEstadosFinais == 1) {
 			printf ("Insira o estado de aceitação: %c", e->representacao);

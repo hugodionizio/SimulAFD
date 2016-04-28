@@ -13,9 +13,9 @@ void criarFuncoes(Transicao *t, Estado e, Alfabeto a) {
 	t->numEstados = e.numEstados;
 	t->numSimbolos = a.numSimbolos;
 
-	t->funcoes = (char **)malloc(t->numEstados*sizeof(char));
+	t->funcoes = (int **)malloc(t->numEstados*sizeof(int));
 	for (i = 0; i < t->numEstados; i++)
-		t->funcoes[i] = (char *)malloc(t->numSimbolos*sizeof(char));
+		t->funcoes[i] = (int *)malloc(t->numSimbolos*sizeof(int));
 }
 
 void inicializarFuncoes(Transicao *t) {
@@ -23,7 +23,7 @@ void inicializarFuncoes(Transicao *t) {
 
 	for (i = 0; i < t->numEstados; i++) {
 		for (j = 0; j < t->numSimbolos; j++)
-			t->funcoes[j][i] = ' ';
+			t->funcoes[j][i] = -1;
 	}
 }
 
@@ -34,7 +34,7 @@ void definirFuncoes(Transicao *t, Estado e, Alfabeto a) {
 	for (i = 0; i < t->numEstados; i++) {
 		for (j = 0; j < t->numSimbolos; j++) {
 			printf("delta(%c%d, %c) = %c",e.representacao, i, a.simbolos[j], e.representacao);
-			scanf(" %c", &t->funcoes[j][i]);
+			scanf("%d", &t->funcoes[j][i]);
 		}
 	}
 }
@@ -55,26 +55,26 @@ void imprimirFuncoes(Transicao t, Alfabeto a, Estado e) {
 	int i, j;
 	for (i = 0; i < t.numEstados; i++) {
 		printf("\n |");
-		if (i == e.estadoInicial)
+		if (e.estados[i] == e.estadoInicial)
 			printf(" ->");
 		else printf("  ");
-		if (buscaSequencial(i, e.numEstadosFinais, e.estadosFinais) < e.numEstadosFinais) {
-			if(i == e.estadoInicial)
+		if (buscaSequencial(e.estados[i], e.numEstadosFinais, e.estadosFinais) < e.numEstadosFinais) {
+			if(e.estados[i] == e.estadoInicial)
 				printf("*");
 			else
 				printf(" *");
 		}
 		else {
-			if(i != e.estadoInicial)
+			if(e.estados[i] != e.estadoInicial)
 				printf(" ");
 		}
-		if (i != e.estadoInicial &&
-				buscaSequencial(i, e.numEstadosFinais, e.estadosFinais) >=
+		if (e.estados[i] != e.estadoInicial &&
+				buscaSequencial(e.estados[i], e.numEstadosFinais, e.estadosFinais) >=
 					e.numEstadosFinais)
 			printf(" ");
 		printf("%c%d  ",e.representacao, i);
 		for (j = 0; j < a.numSimbolos; j++) {
-			printf(" | %c%c",e.representacao, t.funcoes[j][i]);
+			printf(" | %c%d",e.representacao, t.funcoes[j][i]);
 		}
 		printf(" |");
 	}
