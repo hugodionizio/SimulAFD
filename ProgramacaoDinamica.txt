@@ -1,0 +1,9 @@
+// Programação dinâmica
+
+Para i := 1 até n faça N[i, j] := {x[i]}; todos os outros N[i, j] são vazios no único
+Para s := 1 até n - 1 faça
+  Para i := 1 até n - s faça
+    Para K := i até i+s-1 faça
+    Se existe uma regra A -> BC pertencente a R com B pertencente a N[i, k] e C pertencente a N[k + 1, i + s],
+    Então adicione A para N[i, i+s],
+  Aceite x se S pertencente a N[i, n].
