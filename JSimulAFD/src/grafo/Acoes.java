@@ -16,12 +16,18 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import jna.EstadoStruct;
+
 import com.mxgraph.analysis.mxAnalysisGraph;
 import com.mxgraph.layout.mxCircleLayout;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxGraph;
 import com.mxgraph.view.mxStylesheet;
+import com.sun.jna.Library;
+import com.sun.jna.Native;
+import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
 
 public class Acoes extends JFrame {
 	protected static mxGraph graph = new mxGraph();
@@ -40,6 +46,22 @@ public class Acoes extends JFrame {
 	private Object cell;
 	private JLabel lblauthor;
 
+	public interface CLibrary extends Library {
+		public static class EstadoStruct extends Structure {
+			public static class ByReference extends EstadoStruct implements
+					Structure.ByReference {
+			}
+
+			public int numEstados;
+			public Pointer estados; // int*
+
+			public char representacao;
+			public int estadoInicial;
+			public int numEstadosFinais;
+			public Pointer estadosFinais; // int*
+		}
+	}
+
 	public static HashMap getM() {
 		return m;
 	}
@@ -55,7 +77,7 @@ public class Acoes extends JFrame {
 
 	private void initGUI() {
 		setSize(800, 600);
-		//setSize(700, 500);
+		// setSize(700, 500);
 		setLocationRelativeTo(null);
 		mxCircleLayout layout;
 		getContentPane().setLayout(null);
@@ -73,45 +95,39 @@ public class Acoes extends JFrame {
 		getContentPane().add(texto);
 		// texto.setPreferredSize(new Dimension(520, 21));
 		texto.setPreferredSize(new Dimension(210, 20));
-		
+
 		// layout = new mxCircleLayout(graph, 1);
 		// layout.execute(graph.getDefaultParent());
 
 		// Adds cells to the model in a single step
 
-/*		Object parent = this.getGraph().getDefaultParent();
-		graph.getModel().beginUpdate();
-		try {
-			mxStylesheet stylesheet = graph.getStylesheet();
-			Hashtable<String, Object> style = new Hashtable<String, Object>();
-			style.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_DOUBLE_ELLIPSE);
-			style.put(mxConstants.STYLE_OPACITY, 50);
-			style.put(mxConstants.STYLE_FONTCOLOR, "#774400");
-			stylesheet.putCellStyle("ROUNDED", style);
-			
-			String nome = "Inicio";			
-			Object v0 = graph.insertVertex(parent, null, nome, 20, 20, 30,
-					30, ";strokeColor=red;fillColor=green");
-			this.getM().put(nome, v0);
-			
-			nome = "Hello,";
-			Object v1 = graph.insertVertex(parent, null, nome, 60, 60, 40,
-					40, "ROUNDED;strokeColor=red;fillColor=green");
-			this.getM().put(nome, v1);
-			
-			nome = "World!";
-			Object v2 = graph.insertVertex(parent, null, "World!", 200, 150,
-					80, 30, "defaultVertex;fillColor=blue");
-			this.getM().put(nome, v2);
-			
-			Object inicio = graph.insertEdge(parent, null, "", v0, v1);
-			Object e1 = graph.insertEdge(parent, null, "a", v1, v1);
-			
-		} finally {
-			// Updates the display
-			graph.getModel().endUpdate();
-		}
-*/
+		/*
+		 * Object parent = this.getGraph().getDefaultParent();
+		 * graph.getModel().beginUpdate(); try { mxStylesheet stylesheet =
+		 * graph.getStylesheet(); Hashtable<String, Object> style = new
+		 * Hashtable<String, Object>(); style.put(mxConstants.STYLE_SHAPE,
+		 * mxConstants.SHAPE_DOUBLE_ELLIPSE);
+		 * style.put(mxConstants.STYLE_OPACITY, 50);
+		 * style.put(mxConstants.STYLE_FONTCOLOR, "#774400");
+		 * stylesheet.putCellStyle("ROUNDED", style);
+		 * 
+		 * String nome = "Inicio"; Object v0 = graph.insertVertex(parent, null,
+		 * nome, 20, 20, 30, 30, ";strokeColor=red;fillColor=green");
+		 * this.getM().put(nome, v0);
+		 * 
+		 * nome = "Hello,"; Object v1 = graph.insertVertex(parent, null, nome,
+		 * 60, 60, 40, 40, "ROUNDED;strokeColor=red;fillColor=green");
+		 * this.getM().put(nome, v1);
+		 * 
+		 * nome = "World!"; Object v2 = graph.insertVertex(parent, null,
+		 * "World!", 200, 150, 80, 30, "defaultVertex;fillColor=blue");
+		 * this.getM().put(nome, v2);
+		 * 
+		 * Object inicio = graph.insertEdge(parent, null, "", v0, v1); Object e1
+		 * = graph.insertEdge(parent, null, "a", v1, v1);
+		 * 
+		 * } finally { // Updates the display graph.getModel().endUpdate(); }
+		 */
 		JButton botaoAdd = new JButton("Adicionar");
 		botaoAdd.setBounds(243, 390, 100, 25);
 		getContentPane().add(botaoAdd);
@@ -149,40 +165,41 @@ public class Acoes extends JFrame {
 
 			}
 		});
-		
+
 		JButton botaoInicial = new JButton("Estado Inicial");
 		botaoInicial.setBounds(515, 390, 128, 25);
 		getContentPane().add(botaoInicial);
 		botaoInicial.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				boolean existe = false;
-				
+
 				Object parent = getGraph().getDefaultParent();
-				
+
 				for (Object estado : graph.getChildVertices(parent)) {
-					
+
 					com.mxgraph.model.mxCell este;
-					este = (com.mxgraph.model.mxCell)estado;
-					
+					este = (com.mxgraph.model.mxCell) estado;
+
 					if (este.getValue().toString().equalsIgnoreCase("Inicio")) {
-						JOptionPane.showMessageDialog(null, "Estado inicial já existe");
-//						System.out.println("Não é para gerar!!!");
+						JOptionPane.showMessageDialog(null,
+								"Estado inicial já existe");
+						// System.out.println("Não é para gerar!!!");
 						existe = true;
 						break;
 					}
-//					else break;
+					// else break;
 				}
 
 				if (!existe) {
 					AdicionarEstado add = new AdicionarEstado("Inicio", true);
-					
+
 					graph.getModel().beginUpdate();
-						Object v0 = getM().get("Inicio");
-						Object e1 = graph.insertEdge(parent, null, "", v0, cell);
+					Object v0 = getM().get("Inicio");
+					Object e1 = graph.insertEdge(parent, null, "", v0, cell);
 					graph.getModel().endUpdate();
-				}				
+				}
 			}
 		});
 
@@ -190,15 +207,16 @@ public class Acoes extends JFrame {
 		botaoFinal.setBounds(648, 390, 121, 25);
 		getContentPane().add(botaoFinal);
 		botaoFinal.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				mxStylesheet estado = graph.getStylesheet();
 				Hashtable<String, Object> style = new Hashtable<String, Object>();
-				style.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_DOUBLE_ELLIPSE);
+				style.put(mxConstants.STYLE_SHAPE,
+						mxConstants.SHAPE_DOUBLE_ELLIPSE);
 				estado.putCellStyle("ESTADOFINAL", style);
 
-				graph.getModel().setStyle(cell,"ESTADOFINAL");				
+				graph.getModel().setStyle(cell, "ESTADOFINAL");
 			}
 		});
 
@@ -211,43 +229,69 @@ public class Acoes extends JFrame {
 		botaoSequencia.setBounds(255, 455, 170, 25);
 		getContentPane().add(botaoSequencia);
 		botaoSequencia.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Verificando sequência: "+sequencia.getText());
+				System.out.println("Verificando sequência: "
+						+ sequencia.getText());
 
 				Object parent = getGraph().getDefaultParent();
 				int numEstados = graph.getChildVertices(parent).length;
+
+				char representCarac = '\0';
+				int ordemEstado;
+				
+				CLibrary clib;
+				CLibrary.EstadoStruct.ByReference estAut;
+				
+				try {
+					clib = (CLibrary)Native.loadLibrary("./CSimulAFD.so", CLibrary.class);
+					// generate data to send
+					estAut = new CLibrary.EstadoStruct.ByReference();
+				} catch (UnsatisfiedLinkError e2) {
+					clib = (CLibrary)Native.loadLibrary("./bin/CSimulAFD.so", CLibrary.class);
+					// generate data to send
+					estAut = new CLibrary.EstadoStruct.ByReference();
+				}
 				
 				for (Object estado : graph.getChildVertices(parent)) {
-					
+
 					com.mxgraph.model.mxCell este;
-					este = (com.mxgraph.model.mxCell)estado;
-					
-					System.out.println("Estado ["+este.getId()+"] "+este.getValue().toString());
+					este = (com.mxgraph.model.mxCell) estado;
+
+					representCarac = este.getValue().toString().charAt(0);
+					ordemEstado = Integer.parseInt(este.getValue().toString()
+							.substring(1));
+
+					System.out.println("Estado [" + este.getId()
+							+ "]: representação: " + representCarac
+							+ " ordem na lista: " + ordemEstado);
 					if (este.getValue().toString().equalsIgnoreCase("Inicio"))
 						numEstados--;
 				}
-				System.out.println("Número de estados: "+numEstados);
+				estAut.representacao = representCarac;
+				estAut.numEstados = numEstados;
+
+				System.out.println("Número de estados: " + numEstados);
 			}
 		});
-		
+
 		JButton botaoLimpar = new JButton("Limpar");
 		botaoLimpar.setBounds(440, 455, 82, 25);
 		getContentPane().add(botaoLimpar);
 		botaoLimpar.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Object parent = getGraph().getDefaultParent();
 				for (Object estado : graph.getChildVertices(parent)) {
-					
+
 					com.mxgraph.model.mxCell este;
-					este = (com.mxgraph.model.mxCell)estado;					
-								
+					este = (com.mxgraph.model.mxCell) estado;
+
 					Object trash = getM().get(este.getValue().toString());
-					graph.removeCells(new Object[]{trash});
-				}				
+					graph.removeCells(new Object[] { trash });
+				}
 			}
 		});
 
@@ -288,7 +332,7 @@ public class Acoes extends JFrame {
 		 * graph.getDefaultParent(); graph.insertVertex(parent, null, "TESTE",
 		 * 30, 80, 100, 50); graph.getModel().endUpdate();
 		 */
-		
+
 		lblauthor = new JLabel("by Hugo Dionizio Santos");
 		lblauthor.setFont(new Font("Dialog", Font.BOLD, 9));
 		lblauthor.setBounds(630, 544, 139, 15);

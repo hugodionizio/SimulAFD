@@ -14,6 +14,6 @@ public class AutomatoStruct extends Structure {
 	public static class ByReference extends AutomatoStruct implements Structure.ByReference {}
 
 	public AlfabetoStruct a;
-	public EstadosStruct e; // Conjunto de Estados, Estado Inicial e Estados Finais
+	public EstadoStruct e; // Conjunto de Estados, Estado Inicial e Estados Finais
 	public TransicaoStruct t;
 }
