@@ -8,9 +8,20 @@
 #ifndef SRC_AUTOMATO_H_
 #define SRC_AUTOMATO_H_
 
+#include <math.h>
 #include "Alfabeto.h"
 #include "Estado.h"
 #include "Transicao.h"
+
+// Estruturas de Dados
+# ifndef __cplusplus
+// Lógico
+enum bool {
+	false,
+	true
+};
+typedef enum bool bool;
+#endif
 
 struct Automato {
 	Alfabeto a;
@@ -20,10 +31,11 @@ struct Automato {
 typedef struct Automato Automato;
 
 void criarAutomato(Automato *);
-void verificarAutomato(Automato);
-void verificarSequencia(Automato, char *);
+bool verificarAutomato(Automato);
+bool verificarSequencia(Automato, char *);
 void imprimirAutomato(Automato);
 
 int buscaSequencial (int, int, int *);
+int buscaSequencialStr (char, int, char *);
 
 #endif /* SRC_AUTOMATO_H_ */

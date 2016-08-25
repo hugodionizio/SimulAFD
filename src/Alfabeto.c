@@ -11,15 +11,15 @@ void criarAlfabeto(Alfabeto *a) {
 	int i;
 	a->numSimbolos = 2;
 
-	a->simbolos = (int *)malloc(a->numSimbolos);
+	a->simbolos = (char *)malloc(a->numSimbolos*sizeof(char));
 	for (i = 0; i < a->numSimbolos; i++) {
 			printf("Insira o %dº símbolo do alfabeto: ", (i+1));
-			scanf("%d", &a->simbolos[i]);
+			scanf(" %c", &a->simbolos[i]);
 	}
 }
 
 void imprimirAlfabeto(Alfabeto a) {
 	int i;
 	for (i = 0; i < a.numSimbolos; i++)
-			printf(" |  %d", a.simbolos[i]);
+			printf(" |  %c", a.simbolos[i]);
 }

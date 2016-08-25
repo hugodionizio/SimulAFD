@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include "Automato.h"
 
+#define null NULL
+
 int terminal () {
 	char seq[80];
 	int i, tam;
@@ -10,11 +12,15 @@ int terminal () {
 	criarAutomato(&aut);
 	verificarAutomato(aut);
 
+	imprimirAutomato(aut);
+
 	printf("Informe a sequência de símbolos: ");
 	scanf("%s", &seq);
-	verificarSequencia(aut, seq);
-
-	imprimirAutomato(aut);
+	do {
+		verificarSequencia(aut, seq);
+		printf("Informe a sequência de símbolos: ");
+		scanf("%s", &seq);
+	} while (seq != 0);
 
 	return 0;
 }

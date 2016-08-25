@@ -11,28 +11,30 @@
 
 void criarAutomato(Automato *aut) {
 	// Dimensionando estados do Autômato
-	criarEstado(&aut->e);
+	criarEstadoTerminal(&aut->e);
 
-	// Definindo simbologia do Alfabeto
-	criarAlfabeto(&aut->a);
+	if (aut->e.numEstados > 0) {
+		// Definindo simbologia do Alfabeto
+		criarAlfabeto(&aut->a);
 
-	// Criação da Matriz de Funções de Transições
-	criarFuncoes(&aut->t, aut->e, aut->a);
+		// Criação da Matriz de Funções de Transições
+		criarFuncoes(&aut->t, aut->e, aut->a);
 
-	// Inicialização da Matriz
-	inicializarFuncoes(&aut->t);
+		// Inicialização da Matriz
+		inicializarFuncoes(&aut->t);
 
-	// Construção do Autômato
-	definirFuncoes(&aut->t, aut->a);
-	selecionarEstadoInicial(&aut->e);
-	selecionarEstadosFinais(&aut->e);
+		// Construção do Autômatofor
+		definirFuncoes(&aut->t, aut->e, aut->a);
+		selecionarEstadoInicialTerminal(&aut->e);
+		selecionarEstadosFinaisTerminal(&aut->e);
+	}
 }
 
-void verificarAutomato(Automato aut) {
+bool verificarAutomato(Automato aut) {
 	int i, j, topo, count = 0;
 	int *estadosVerificados;
 
-	estadosVerificados = (int *)malloc(aut.e.numEstados);
+	estadosVerificados = (int *)malloc(aut.e.numEstados*sizeof(int));
 
 	for (i = 0; i < aut.e.numEstados; ++i) {
 		estadosVerificados[i] = -1;
@@ -43,8 +45,8 @@ void verificarAutomato(Automato aut) {
 	i = estadosVerificados[0];
 	while(topo < aut.e.numEstados && count < pow((double)2, (double)aut.e.numEstados)) {
 		for (j = 0; j < aut.a.numSimbolos; ++j) {
-			if(aut.t.funcoes[i][j] != i) {
-				i = aut.t.funcoes[i][j];
+			if(aut.t.funcoes[j][i] != i) {
+				i = aut.t.funcoes[j][i];
 
 				if(buscaSequencial(i, aut.e.numEstados, estadosVerificados) == aut.e.numEstados) {
 					estadosVerificados[topo+1] = i;
@@ -55,25 +57,49 @@ void verificarAutomato(Automato aut) {
 		}
 	}
 
-	if (topo < aut.e.numEstados)
+	if (topo < aut.e.numEstados) {
 		printf("O autômato é um AFD\n");
-	else
+		return true;
+	}
+	else {
 		printf("O autômato não é um AFD\n");
-
+		return false;
+	}
 }
 
-void verificarSequencia(Automato aut, char *seq) {
-	int i, j = aut.e.estadoInicial;
+bool verificarSequencia(Automato aut, char *seq) {
+	bool result = false;
+
+	int i, j = aut.e.estadoInicial, s, pos;
 	int tam = strlen(seq);
 
+	for(s = 0; s < tam; s++) {
+		pos = buscaSequencialStr(seq[s], aut.a.numSimbolos, aut.a.simbolos);
+		if (pos < aut.a.numSimbolos) {
+			j = aut.t.funcoes[j][pos];
+		}
+		else {
+			printf("Símbolo na sequência não encontrado.\n");
+			j = -1;
+			break;
+		}
+	}
+
+/*
 	for (i = 0; i < tam; ++i) {
 		j = aut.t.funcoes[j][seq[i]];
 	}
-
-	if (buscaSequencial(j, aut.e.numEstadosFinais, aut.e.estadosFinais) >= aut.e.numEstadosFinais)
+*/
+	if (buscaSequencial(j, aut.e.numEstadosFinais, aut.e.estadosFinais) < aut.e.numEstadosFinais) {
 		printf("Essa sequência pertence ao AFD.\n");
-	else
+		result = true;
+	}
+	else {
 		printf("Essa sequência não pertence ao AFD.\n");
+		result = false;
+	}
+
+	return result;
 }
 
 // Impressão

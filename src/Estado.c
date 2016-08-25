@@ -7,27 +7,41 @@
 
 #include "Estado.h"
 
-void criarEstado(Estado *e) {
-	printf("Insira a quantidade de estados do Autômato: ");
+void criarEstadoTerminal(Estado *e) {
+	printf("Informe a representação padrão dos estados: ");
+	scanf(" %c", &e->representacao);
+
+	printf("Informe a quantidade de estados do Autômato: ");
 	scanf("%d", &e->numEstados);
+	e->estados = (int *)malloc(e->numEstados*sizeof(int));
+
+	inicializarEstado(e);
 }
 
-void selecionarEstadoInicial(Estado *e) {
-	printf("Qual o estado inicial do Autômato: q");
+void inicializarEstado(Estado *e) {
+	int i;
+
+	for (i = 0; i < e->numEstados; ++i) {
+		e->estados[i] = i;
+	}
+}
+
+void selecionarEstadoInicialTerminal(Estado* e) {
+	printf("Qual o estado inicial do Autômato: %c", e->representacao);
 	scanf("%d", &e->estadoInicial);
 }
 
-void selecionarEstadosFinais(Estado *e) {
+void selecionarEstadosFinaisTerminal(Estado *e) {
 	int i;
 	printf("Insira a quantidade de estados de aceitação do Autômato: ");
 	scanf("%d", &e->numEstadosFinais);
-	e->estadosFinais = (int *)malloc(e->numEstadosFinais);
+	e->estadosFinais = (int *)malloc(e->numEstadosFinais*sizeof(int));
 	for (i = 0; i < e->numEstadosFinais; i++) {
 		if (e->numEstadosFinais == 1) {
-			printf ("Insira o estado de aceitação: q");
+			printf ("Insira o estado de aceitação: %c", e->representacao);
 			scanf ("%d", &e->estadosFinais[i]);
 		} else {
-			printf("Insira o %dº estado de aceitação: q",i+1);
+			printf("Insira o %dº estado de aceitação: %c",i+1, e->representacao);
 			scanf("%d", &e->estadosFinais[i]);
 		}
 	}
@@ -43,7 +57,7 @@ void imprimirEstados(Estado e) {
 }
 
 void imprimirEstadoInicial(Estado e) {
-	printf("\n\nq%d é o Estado Inicial.\n", e.estadoInicial);
+	printf("\n\n%c%d é o Estado Inicial.\n", e.representacao, e.estadoInicial);
 }
 
 void imprimirEstadosFinais(Estado e) {
@@ -56,5 +70,5 @@ void imprimirEstadosFinais(Estado e) {
 			printf(", ");
 	}
 	//		printf("| Estado(s) de aceitação");
-	printf("}.");
+	printf("}.\n");
 }
