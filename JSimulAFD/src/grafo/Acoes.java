@@ -16,7 +16,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import jna.AlfabetoStruct;
+import jna.AutomatoStruct;
 import jna.EstadoStruct;
+import jna.TransicaoStruct;
 
 import com.mxgraph.analysis.mxAnalysisGraph;
 import com.mxgraph.layout.mxCircleLayout;
@@ -25,6 +28,7 @@ import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxGraph;
 import com.mxgraph.view.mxStylesheet;
 import com.sun.jna.Library;
+import com.sun.jna.Memory;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
@@ -60,7 +64,46 @@ public class Acoes extends JFrame {
 			public int numEstadosFinais;
 			public Pointer estadosFinais; // int*
 		}
+
+		public static class Alfabeto extends Structure {
+			public static class ByReference extends Alfabeto implements
+					Structure.ByReference {
+			}
+
+			public int numSimbolos;
+			public Pointer simbolos; // char*
+		}
+
+		public static class Transicao extends Structure {
+			public static class ByReference extends Transicao implements
+					Structure.ByReference {
+			}
+
+			public int numSimbolos;
+			public int numEstados;
+
+			public Pointer funcoes; // char**
+		}
+
+		public static class Automato extends Structure {
+			public static class ByReference extends Automato implements
+					Structure.ByReference {
+			}
+
+			public Alfabeto a;
+			public EstadoStruct e; // Conjunto de Estados, Estado Inicial e
+									// Estados Finais
+			public Transicao t;
+		}
+		
+		public int verificarAutomato(Automato aut); 
 	}
+
+	CLibrary clib;
+	CLibrary.EstadoStruct.ByReference estAut;
+	CLibrary.Alfabeto.ByReference alfAut;
+	CLibrary.Transicao.ByReference traAut;
+	CLibrary.Automato.ByReference aut;
 
 	public static HashMap getM() {
 		return m;
@@ -72,6 +115,19 @@ public class Acoes extends JFrame {
 
 	public Acoes() {
 		super("JSimulAFD - Simulador de AFD em JNA");
+
+		try {
+			clib = (CLibrary) Native.loadLibrary("./CSimulAFD.so",
+					CLibrary.class);
+			// generate data to send
+			estAut = new CLibrary.EstadoStruct.ByReference();
+		} catch (UnsatisfiedLinkError e2) {
+			clib = (CLibrary) Native.loadLibrary("./bin/CSimulAFD.so",
+					CLibrary.class);
+			// generate data to send
+			estAut = new CLibrary.EstadoStruct.ByReference();
+		}
+
 		initGUI();
 	}
 
@@ -135,7 +191,12 @@ public class Acoes extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AdicionarEstado add = new AdicionarEstado(texto.getText());
+				if (texto.getText().length() > 0) {
+					AdicionarEstado add = new AdicionarEstado(texto.getText());
+					estAut.numEstados++;
+
+					estAut.representacao = texto.getText().charAt(0);
+				}
 
 				texto.setText("");
 			}
@@ -149,6 +210,7 @@ public class Acoes extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				graph.getModel().remove(cell);
+				estAut.numEstados--;
 				// DeletarEstado del = new DeletarEstado(texto.getText());
 			}
 		});
@@ -199,6 +261,10 @@ public class Acoes extends JFrame {
 					Object v0 = getM().get("Inicio");
 					Object e1 = graph.insertEdge(parent, null, "", v0, cell);
 					graph.getModel().endUpdate();
+					com.mxgraph.model.mxCell estIni;
+					estIni = (com.mxgraph.model.mxCell) cell;
+					estAut.estadoInicial = Integer.parseInt(estIni.getValue()
+							.toString().substring(1));
 				}
 			}
 		});
@@ -217,6 +283,7 @@ public class Acoes extends JFrame {
 				estado.putCellStyle("ESTADOFINAL", style);
 
 				graph.getModel().setStyle(cell, "ESTADOFINAL");
+				estAut.numEstadosFinais++;
 			}
 		});
 
@@ -240,44 +307,66 @@ public class Acoes extends JFrame {
 
 				char representCarac = '\0';
 				int ordemEstado;
-				
-				CLibrary clib;
-				CLibrary.EstadoStruct.ByReference estAut;
-				
-				try {
-					clib = (CLibrary)Native.loadLibrary("./CSimulAFD.so", CLibrary.class);
-					// generate data to send
-					estAut = new CLibrary.EstadoStruct.ByReference();
-				} catch (UnsatisfiedLinkError e2) {
-					clib = (CLibrary)Native.loadLibrary("./bin/CSimulAFD.so", CLibrary.class);
-					// generate data to send
-					estAut = new CLibrary.EstadoStruct.ByReference();
-				}
-				
+
+				// estAut.numEstados = graph.getChildVertices(parent).length -
+				// 1;
+				if (estAut.numEstadosFinais > 0)
+					estAut.estados = new Memory(estAut.numEstados
+							* Native.getNativeSize(int.class));
+				if (estAut.numEstadosFinais > 0)
+					estAut.estadosFinais = new Memory(estAut.numEstadosFinais
+							* Native.getNativeSize(int.class));
+
+				int i = 0;
 				for (Object estado : graph.getChildVertices(parent)) {
 
 					com.mxgraph.model.mxCell este;
 					este = (com.mxgraph.model.mxCell) estado;
 
-					representCarac = este.getValue().toString().charAt(0);
-					ordemEstado = Integer.parseInt(este.getValue().toString()
-							.substring(1));
+					if (!este.getValue().toString().equalsIgnoreCase("Inicio")) {
+						representCarac = este.getValue().toString().charAt(0);
+						ordemEstado = Integer.parseInt(este.getValue()
+								.toString().substring(1));
 
-					System.out.println("Estado [" + este.getId()
-							+ "]: representação: " + representCarac
-							+ " ordem na lista: " + ordemEstado);
-					if (este.getValue().toString().equalsIgnoreCase("Inicio"))
-						numEstados--;
+						System.out.println("Estado [" + este.getId()
+								+ "]: representação: " + representCarac
+								+ " ordem na lista: " + ordemEstado);
+						if (este.getStyle().equalsIgnoreCase("ESTADOFINAL")) {
+							System.out.println("Estado de Aceitação");
+							// estAut.estadosFinais.setInt(i, ordemEstado);
+						}
+						//estAut.estados.setInt(i, ordemEstado);
+
+						/*
+						 * if
+						 * (este.getValue().toString().equalsIgnoreCase("Inicio"
+						 * )) numEstados--;
+						 */
+						i++;
+					}
 				}
-				estAut.representacao = representCarac;
-				estAut.numEstados = numEstados;
+				// estAut.representacao = representCarac;
+				// estAut.estadoInicial = 0;
 
-				System.out.println("Número de estados: " + numEstados);
+				System.out.println("Símbolo de representação dos estados: "
+						+ estAut.representacao);
+				System.out.println("Estado inicial: " + estAut.estadoInicial);
+				// System.out.println("Valor do estado[ "+i+"]: "
+				// +estAut.estados[i]);
+				System.out.println("Número de estados: " + estAut.numEstados);
+				// System.out.println("Valor do estado final[ "+i+"]: "
+				// +estAut.estadosFinais[i]);
+				System.out.println("Número de estados finais: "
+						+ estAut.numEstadosFinais);
+				
+				aut.a = alfAut;
+				aut.e = estAut;
+				aut.t = traAut;
 			}
 		});
 
-		JButton botaoLimpar = new JButton("Limpar");
-		botaoLimpar.setBounds(440, 455, 82, 25);
+		JButton botaoLimpar = new JButton("Limpar Autômato");
+		botaoLimpar.setBounds(440, 455, 170, 25);
 		getContentPane().add(botaoLimpar);
 		botaoLimpar.addActionListener(new ActionListener() {
 
@@ -292,6 +381,14 @@ public class Acoes extends JFrame {
 					Object trash = getM().get(este.getValue().toString());
 					graph.removeCells(new Object[] { trash });
 				}
+				if (estAut.estados != null)
+					estAut.estados.clear(0);
+				estAut.numEstados = 0;
+				if (estAut.estadosFinais != null)
+					estAut.estadosFinais.clear(0);
+				estAut.numEstadosFinais = 0;
+				estAut.representacao = '\0';
+				estAut.estadoInicial = -1;
 			}
 		});
 
