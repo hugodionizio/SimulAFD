@@ -24,10 +24,10 @@ rm jgraphx*.jar
 cd ..
 
 # Compilação do projeto em Java
-javac -classpath src/grafo/*.jar src/jna/*.jar src/*.jar src/*.java -d bin/
+javac -classpath src/\* src/grafo/*.java src/jnaf/*.java -d bin/
 cp -r src/META-INF bin/META-INF
 cd bin
-jar cvfm JSimulAFD.jar META-INF/MANIFEST.MF JSimulAFD.class JSimulAFD\$JSimulAFD.class com CSimulAFD.so
+jar cvfm JSimulAFD.jar META-INF/MANIFEST.MF Principal.class com grafo jnaf CSimulAFD.so
 
 # Execução do projeto em jar
 java -jar JSimulAFD.jar

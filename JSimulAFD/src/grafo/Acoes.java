@@ -16,10 +16,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import jna.AlfabetoStruct;
-import jna.AutomatoStruct;
-import jna.EstadoStruct;
-import jna.TransicaoStruct;
+import jnaf.AlfabetoStruct;
+import jnaf.AutomatoStruct;
+import jnaf.EstadoStruct;
+import jnaf.TransicaoStruct;
 
 import com.mxgraph.analysis.mxAnalysisGraph;
 import com.mxgraph.layout.mxCircleLayout;

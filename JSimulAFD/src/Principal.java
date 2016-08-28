@@ -1,9 +1,9 @@
 import grafo.Acoes;
-import jna.CSimulAFD;
-import jna.Example15;
-import jna.ExampleStructInt;
-import jna.Stdio;
-
+import jnaf.CSimulAFD;
+/*import jnaf.Example15;
+import jnaf.ExampleStructInt;
+import jnaf.Stdio;
+*/
 public class Principal {
 
 	public Principal() {

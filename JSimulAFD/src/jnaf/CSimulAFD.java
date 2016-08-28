@@ -1,7 +1,7 @@
 
 // Example #1: Send and Receive an Integer
 
-package jna;
+package jnaf;
 
 import com.sun.jna.Library;
 import com.sun.jna.Native;
