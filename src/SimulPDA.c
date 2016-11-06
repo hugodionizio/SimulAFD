@@ -1,12 +1,12 @@
 /*
- *  Projeto: Autômatos Finitos Deterministicos
- *  Programa: CSimulAFD.c
- *  Objetivo: Implementar um simulador de autômatos finitos determinísticos – AFD
- *  		que permite testar o reconhecimento de diversas cadeias para qualquer AFD de entrada.
- *  Created on: 08/03/2016
+ *  Projeto: Autômatos Finitos com Pilha
+ *  Programa: SimulPDA.c
+ *  Objetivo: Implementar um simulador de autômatos finitos com pilha – PDA
+ *  		que permite testar o reconhecimento de diversas cadeias para qualquer PDA de entrada.
+ *  Created on: 05/11/2016
  *      Author: Hugo Dionizio Santos
  */
-#include "CSimulAFD.h"
+#include "SimulPDA.h"
 #define TAMBUFF 1024 /* tamanho do buffer */
 char buff[TAMBUFF + 1];
 
@@ -19,8 +19,8 @@ int main (int argc, char **argv) {
 	int fd, BytesLidos;
 
 // Seção de Comandos
-	printf ("1º Trabalho da disciplina de Linguagens Formais e Autômatos\n");
-	printf ("CSimulAFD: Simulador de Autômatos Finitos determinísticos (AFD)\n");
+	printf ("Trabalho da 3ª Unidade da disciplina de Linguagens Formais e Autômatos\n");
+	printf ("SimulPDA: Simulador de Autômatos Finitos com Pilha (PDA)\n");
 	if (argc > 1 && strcmp(argv[1], "--help") == 0) {
 
 		if(argc !=2) {

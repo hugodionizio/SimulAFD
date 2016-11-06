@@ -1,14 +1,15 @@
 /*
- * Transicao.c
+ * Producao.c
  *
  *  Created on: 13/03/2016
  *      Author: hugo
  */
 
-#include <stdlib.h>
-#include "Transicao.h"
+#include "Producao.h"
 
-void criarFuncoes(Transicao *t, Estado e, Alfabeto a) {
+#include <stdlib.h>
+
+void criarFuncoes(Producao *t, Estado e, Alfabeto a) {
 	int i;
 	t->numEstados = e.numEstados;
 	t->numSimbolos = a.numSimbolos;
@@ -18,7 +19,7 @@ void criarFuncoes(Transicao *t, Estado e, Alfabeto a) {
 		t->funcoes[i] = (int *)malloc(t->numSimbolos*sizeof(int));
 }
 
-void inicializarFuncoes(Transicao *t) {
+void inicializarFuncoes(Producao *t) {
 	int i, j;
 
 	for (i = 0; i < t->numEstados; i++) {
@@ -27,10 +28,10 @@ void inicializarFuncoes(Transicao *t) {
 	}
 }
 
-void definirFuncoes(Transicao *t, Estado e, Alfabeto a) {
+void definirFuncoes(Producao *t, Estado e, Alfabeto a) {
 	int i, j;
 
-	printf("Insira as funções de transição do Autômato:\n");
+	printf("Insira as funções de produção do Autômato:\n");
 	for (i = 0; i < t->numEstados; i++) {
 		for (j = 0; j < t->numSimbolos; j++) {
 			printf("delta(%c%d, %c) = %c",e.representacao, i, a.simbolos[j], e.representacao);
@@ -40,7 +41,7 @@ void definirFuncoes(Transicao *t, Estado e, Alfabeto a) {
 }
 
 // Liberar Funções da Memória Principal
-void liberarFuncoes(Transicao *t) {
+void liberarFuncoes(Producao *t) {
 	int i;
 
 	//  Liberação da memória de cada linha
@@ -51,7 +52,7 @@ void liberarFuncoes(Transicao *t) {
 	free(t->funcoes);
 }
 
-void imprimirFuncoes(Transicao t, Alfabeto a, Estado e) {
+void imprimirFuncoes(Producao t, Alfabeto a, Estado e) {
 	int i, j;
 	for (i = 0; i < t.numEstados; i++) {
 		printf("\n |");

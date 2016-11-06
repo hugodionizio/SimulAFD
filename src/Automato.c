@@ -17,7 +17,7 @@ void criarAutomato(Automato *aut) {
 		// Definindo simbologia do Alfabeto
 		criarAlfabeto(&aut->a);
 
-		// Criação da Matriz de Funções de Transições
+		// Criação da Matriz de Funções de Produções
 		criarFuncoes(&aut->t, aut->e, aut->a);
 
 		// Inicialização da Matriz

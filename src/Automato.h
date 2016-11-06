@@ -11,7 +11,8 @@
 #include <math.h>
 #include "Alfabeto.h"
 #include "Estado.h"
-#include "Transicao.h"
+#include "Pilha.h"
+#include "Producao.h"
 
 // Estruturas de Dados
 # ifndef __cplusplus
@@ -26,7 +27,7 @@ typedef enum bool bool;
 struct Automato {
 	Alfabeto a;
 	Estado e; // Conjunto de Estados, Estado Inicial e Estados Finais
-	Transicao t;
+	Producao t;
 };
 typedef struct Automato Automato;
 
