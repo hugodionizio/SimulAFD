@@ -76,7 +76,7 @@ bool verificarSequencia(Automato aut, char *seq) {
 	for(s = 0; s < tam; s++) {
 		pos = buscaSequencialStr(seq[s], aut.a.numSimbolos, aut.a.simbolos);
 		if (pos < aut.a.numSimbolos) {
-			j = aut.t.funcoes[j][pos];
+			j = aut.t.funcoes[pos][j];
 		}
 		else {
 			printf("Símbolo na sequência não encontrado.\n");
