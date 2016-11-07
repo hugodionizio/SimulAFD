@@ -22,7 +22,7 @@ typedef struct Pilha {
 } Pilha;
 
 void empilhar(Pilha *, char);
-CelulaPDA desempilhar(Pilha *);
+void desempilhar(Pilha *);
 CelulaPDA verTopo(Pilha);
 
 #endif /* SRC_PILHA_H_ */
