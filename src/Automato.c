@@ -45,8 +45,8 @@ bool verificarAutomato(Automato aut) {
 	i = estadosVerificados[0];
 	while(topo < aut.e.numEstados && count < pow((double)2, (double)aut.e.numEstados)) {
 		for (j = 0; j < aut.a.numSimbolos; ++j) {
-			if(aut.t.funcoes[j][i] != i) {
-				i = aut.t.funcoes[j][i];
+			if(aut.t.producoes[j][i] != i) {
+				i = aut.t.producoes[j][i];
 
 				if(buscaSequencial(i, aut.e.numEstados, estadosVerificados) == aut.e.numEstados) {
 					estadosVerificados[topo+1] = i;
@@ -76,7 +76,7 @@ bool verificarSequencia(Automato aut, char *seq) {
 	for(s = 0; s < tam; s++) {
 		pos = buscaSequencialStr(seq[s], aut.a.numSimbolos, aut.a.simbolos);
 		if (pos < aut.a.numSimbolos) {
-			j = aut.t.funcoes[pos][j];
+			j = aut.t.producoes[pos][j];
 		}
 		else {
 			printf("Símbolo na sequência não encontrado.\n");
