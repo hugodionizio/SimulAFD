@@ -52,6 +52,10 @@ void liberarFuncoes(Producao *t) {
 	free(t->producoes);
 }
 
+Producao getProducao(Producao *producoes, int indice) {
+	return producoes[indice];
+}
+
 void imprimirFuncoes(Producao t, Alfabeto a, Estado e) {
 	int i, j;
 	for (i = 0; i < t.numEstados; i++) {

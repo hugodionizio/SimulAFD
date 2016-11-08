@@ -9,6 +9,8 @@
 #define FITA_H_
 
 typedef struct Fita {
+	int tam;
+
 	char *seq;
 } Fita;
 

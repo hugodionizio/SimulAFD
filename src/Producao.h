@@ -11,18 +11,19 @@
 #include "Alfabeto.h"
 #include "Estado.h"
 
-struct Transicao {
+struct Producao {
 	int numSimbolos;
 	int numEstados;
 
 	int **producoes;
 };
-typedef struct Transicao Producao;
+typedef struct Producao Producao;
 
 void criarFuncoes(Producao *, Estado, Alfabeto);
 void inicializarFuncoes(Producao *);
 void definirFuncoes(Producao *, Estado, Alfabeto);
 void liberarFuncoes(Producao *);
+Producao getProducao(Producao *, int);
 void imprimirFuncoes(Producao, Alfabeto, Estado);
 
 #endif /* SRC_PRODUCAO_H_ */

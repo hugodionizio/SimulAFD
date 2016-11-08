@@ -12,6 +12,7 @@
 #include "Alfabeto.h"
 #include "Estado.h"
 #include "Pilha.h"
+#include "Fita.h"
 #include "Producao.h"
 
 // Estruturas de Dados
