@@ -5,11 +5,11 @@
  *      Author: hugo
  */
 
+#include <stdio.h>
+#include <stdlib.h>
 #include "Producao.h"
 
-#include <stdlib.h>
-
-void criarFuncoes(Producao *t, Estado e, Alfabeto a) {
+void criarProducoes(Producao *t, Estado e, Alfabeto a) {
 	int i;
 	t->numEstados = e.numEstados;
 	t->numSimbolos = a.numSimbolos;
@@ -19,29 +19,29 @@ void criarFuncoes(Producao *t, Estado e, Alfabeto a) {
 		t->producoes[i] = (int *)malloc(t->numSimbolos*sizeof(int));
 }
 
-void inicializarFuncoes(Producao *t) {
+void inicializarProducoes(Producao *t) {
 	int i, j;
 
 	for (i = 0; i < t->numEstados; i++) {
 		for (j = 0; j < t->numSimbolos; j++)
-			t->producoes[j][i] = -1;
+			t->producoes[i][j] = -1;
 	}
 }
 
-void definirFuncoes(Producao *t, Estado e, Alfabeto a) {
+void definirProducoes(Producao *t, Estado e, Alfabeto a) {
 	int i, j;
 
 	printf("Insira as produções do Autômato:\n");
 	for (i = 0; i < t->numEstados; i++) {
 		for (j = 0; j < t->numSimbolos; j++) {
 			printf("delta(%c%d, %c) = %c",e.representacao, i, a.simbolos[j], e.representacao);
-			scanf("%d", &t->producoes[j][i]);
+			scanf("%d", &t->producoes[i][j]);
 		}
 	}
 }
 
 // Liberar Funções da Memória Principal
-void liberarFuncoes(Producao *t) {
+void liberarProducoes(Producao *t) {
 	int i;
 
 	//  Liberação da memória de cada linha
@@ -56,16 +56,16 @@ Producao getProducao(Producao *producoes, int indice) {
 	return producoes[indice];
 }
 
-void imprimirFuncoes(Producao t, Alfabeto a, Estado e) {
+void imprimirProducoes(Producao t, Alfabeto a, Estado e) {
 	int i, j;
 	for (i = 0; i < t.numEstados; i++) {
 		printf("\n |");
 		if (e.estados[i] == e.estadoInicial)
-			printf(" ->");
+			printf("  ->");
 		else printf("  ");
 		if (buscaSequencial(e.estados[i], e.numEstadosFinais, e.estadosFinais) < e.numEstadosFinais) {
 			if(e.estados[i] == e.estadoInicial)
-				printf("*");
+				printf(" *");
 			else
 				printf(" *");
 		}
@@ -79,7 +79,7 @@ void imprimirFuncoes(Producao t, Alfabeto a, Estado e) {
 			printf(" ");
 		printf("%c%d  ",e.representacao, i);
 		for (j = 0; j < a.numSimbolos; j++) {
-			printf(" | %c%d",e.representacao, t.producoes[j][i]);
+			printf(" | %c%d",e.representacao, t.producoes[i][j]);
 		}
 		printf(" |");
 	}

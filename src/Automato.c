@@ -6,6 +6,8 @@
  */
 
 #include "Automato.h"
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <math.h>
 
@@ -17,14 +19,14 @@ void criarAutomato(Automato *aut) {
 		// Definindo simbologia do Alfabeto
 		criarAlfabeto(&aut->a);
 
-		// Criação da Matriz de Funções de Produções
-		criarFuncoes(&aut->t, aut->e, aut->a);
+		// Criação da Matriz de Produções
+		criarProducoes(&aut->t, aut->e, aut->a);
 
 		// Inicialização da Matriz
-		inicializarFuncoes(&aut->t);
+		inicializarProducoes(&aut->t);
 
 		// Construção do Autômatofor
-		definirFuncoes(&aut->t, aut->e, aut->a);
+		definirProducoes(&aut->t, aut->e, aut->a);
 		selecionarEstadoInicialTerminal(&aut->e);
 		selecionarEstadosFinaisTerminal(&aut->e);
 	}
@@ -45,8 +47,8 @@ bool verificarAutomato(Automato aut) {
 	i = estadosVerificados[0];
 	while(topo < aut.e.numEstados && count < pow((double)2, (double)aut.e.numEstados)) {
 		for (j = 0; j < aut.a.numSimbolos; ++j) {
-			if(aut.t.producoes[j][i] != i) {
-				i = aut.t.producoes[j][i];
+			if(aut.t.producoes[i][j] != i) {
+				i = aut.t.producoes[i][j];
 
 				if(buscaSequencial(i, aut.e.numEstados, estadosVerificados) == aut.e.numEstados) {
 					estadosVerificados[topo+1] = i;
@@ -58,25 +60,28 @@ bool verificarAutomato(Automato aut) {
 	}
 
 	if (topo < aut.e.numEstados) {
-		printf("O autômato é um AFD\n");
+		printf("O autômato é um PDA\n");
 		return true;
 	}
 	else {
-		printf("O autômato não é um AFD\n");
+		printf("O autômato não é um PDA\n");
 		return false;
 	}
 }
 
-bool verificarSequencia(Automato aut, char *seq) {
+bool verificarSequencia(Automato *aut, char *seq) {
 	bool result = false;
+	CelulaPDA *aux;
 
-	int i, j = aut.e.estadoInicial, s, pos;
+	int j = aut->e.estadoInicial, s, pos;
 	int tam = strlen(seq);
 
+	criarFita(&aut->f, seq);
+
 	for(s = 0; s < tam; s++) {
-		pos = buscaSequencialStr(seq[s], aut.a.numSimbolos, aut.a.simbolos);
-		if (pos < aut.a.numSimbolos) {
-			j = aut.t.producoes[pos][j];
+		pos = buscaSequencialStr(seq[s], aut->a.numSimbolos, aut->a.simbolos);
+		if (pos < aut->a.numSimbolos) {
+			j = aut->t.producoes[j][pos];
 		}
 		else {
 			printf("Símbolo na sequência não encontrado.\n");
@@ -90,7 +95,10 @@ bool verificarSequencia(Automato aut, char *seq) {
 		j = aut.t.funcoes[j][seq[i]];
 	}
 */
-	if (buscaSequencial(j, aut.e.numEstadosFinais, aut.e.estadosFinais) < aut.e.numEstadosFinais) {
+	aux = (CelulaPDA *)malloc(sizeof(CelulaPDA *));
+	*aux = verTopo(aut->p);
+	if (buscaSequencial(j, aut->e.numEstadosFinais, aut->e.estadosFinais) < aut->e.numEstadosFinais ||
+			aux == NULL) {
 		printf("Essa sequência pertence ao AFD.\n");
 		result = true;
 	}
@@ -111,7 +119,7 @@ void imprimirAutomato(Automato aut) {
 	printf(" |");
 
 	//  Funções de transição
-	imprimirFuncoes(aut.t, aut.a, aut.e);
+	imprimirProducoes(aut.t, aut.a, aut.e);
 
 	//  Estados Inicial e Finais
 	imprimirEstadoInicial(aut.e);

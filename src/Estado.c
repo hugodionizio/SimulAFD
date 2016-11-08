@@ -5,6 +5,8 @@
  *      Author: hugo
  */
 
+#include <stdio.h>
+#include <stdlib.h>
 #include "Estado.h"
 
 void criarEstadoTerminal(Estado *e) {

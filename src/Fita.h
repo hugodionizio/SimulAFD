@@ -14,6 +14,8 @@ typedef struct Fita {
 	char *seq;
 } Fita;
 
+void criarFita(Fita *, char *);
 char getSimboloFita(Fita);
+void retiraDaFita(Fita *);
 
 #endif /* FITA_H_ */

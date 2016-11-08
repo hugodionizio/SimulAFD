@@ -8,6 +8,8 @@
 #ifndef SRC_ESTADO_H_
 #define SRC_ESTADO_H_
 
+#include "Pilha.h"
+
 struct Estado {
 	int numEstados;
 	int *estados;

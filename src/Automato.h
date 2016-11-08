@@ -29,12 +29,14 @@ struct Automato {
 	Alfabeto a;
 	Estado e; // Conjunto de Estados, Estado Inicial e Estados Finais
 	Producao t;
+	Fita f;
+	Pilha p;
 };
 typedef struct Automato Automato;
 
 void criarAutomato(Automato *);
 bool verificarAutomato(Automato);
-bool verificarSequencia(Automato, char *);
+bool verificarSequencia(Automato *, char *);
 void imprimirAutomato(Automato);
 
 int buscaSequencial (int, int, int *);

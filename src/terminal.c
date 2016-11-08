@@ -6,7 +6,6 @@
 
 int terminal () {
 	char seq[80];
-	int i, tam;
 	
 	Automato aut;
 	criarAutomato(&aut);
@@ -15,11 +14,11 @@ int terminal () {
 	imprimirAutomato(aut);
 
 	printf("Informe a sequência de símbolos: ");
-	scanf("%s", &seq);
+	scanf("%s", (char *)&seq);
 	do {
-		verificarSequencia(aut, seq);
+		verificarSequencia(&aut, seq);
 		printf("Informe a sequência de símbolos: ");
-		scanf("%s", &seq);
+		scanf("%s", (char *)&seq);
 	} while (seq != 0);
 
 	return 0;

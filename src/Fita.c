@@ -5,7 +5,15 @@
  *      Author: Hugo Dionizio Santos
  */
 
+#include <string.h>
+#include <stdlib.h>
 #include "Fita.h"
+
+void criarFita(Fita *fita, char *seq) {
+	fita->tam = strlen(seq);
+	fita->seq = (char *)malloc(fita->tam*sizeof(char));
+	strcpy(fita->seq, seq);
+}
 
 char getSimboloFita(Fita fita) {
 
@@ -13,7 +21,7 @@ char getSimboloFita(Fita fita) {
 }
 
 void retiraDaFita(Fita *fita) {
-	int i, len = fita->tam;
+	int i = 0, len = fita->tam;
 
 	if (i+1 < len) {
 		for (i = 0; i+1 < len; ++i) {
@@ -21,4 +29,9 @@ void retiraDaFita(Fita *fita) {
 		}
 		fita->tam--;
 	}
+}
+
+void limparFita(Fita *fita) {
+	fita->tam = 0;
+	free(fita->seq);
 }
