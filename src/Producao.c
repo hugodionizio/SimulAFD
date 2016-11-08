@@ -10,32 +10,45 @@
 #include "Producao.h"
 
 void criarProducoes(Producao *t, Estado e, Alfabeto a) {
-	int i;
+	int i, j;
 	t->numEstados = e.numEstados;
 	t->numSimbolos = a.numSimbolos;
+	t->numSimbolosPilha = 3;
 
-	t->producoes = (int **)malloc(t->numEstados*sizeof(int));
-	for (i = 0; i < t->numEstados; i++)
-		t->producoes[i] = (int *)malloc(t->numSimbolos*sizeof(int));
-}
-
-void inicializarProducoes(Producao *t) {
-	int i, j;
-
+	t->producoes = (int ***)malloc(t->numEstados*sizeof(int));
 	for (i = 0; i < t->numEstados; i++) {
+		t->producoes[i] = (int **)malloc(t->numSimbolos*sizeof(int));
 		for (j = 0; j < t->numSimbolos; j++)
-			t->producoes[i][j] = -1;
+			t->producoes[i][j] = (int *)malloc(t->numSimbolosPilha*sizeof(int));
 	}
 }
 
-void definirProducoes(Producao *t, Estado e, Alfabeto a) {
-	int i, j;
+void inicializarProducoes(Producao *t) {
+	int i, j, k;
+
+	for (i = 0; i < t->numEstados; i++) {
+		for (j = 0; j < t->numSimbolos; j++) {
+			for (k = 0; k < t->numSimbolosPilha; ++k) {
+				t->producoes[i][j][k] = -1;
+			}
+		}
+	}
+}
+
+void definirProducoes(Producao *t, Estado e, Alfabeto a, Alfabeto ap) {
+	int i, j, k;
 
 	printf("Insira as produções do Autômato:\n");
 	for (i = 0; i < t->numEstados; i++) {
 		for (j = 0; j < t->numSimbolos; j++) {
-			printf("delta(%c%d, %c) = %c",e.representacao, i, a.simbolos[j], e.representacao);
-			scanf("%d", &t->producoes[i][j]);
+			for (k = 0; k < t->numSimbolosPilha; ++k) {
+				if (j == 0) {
+					printf("delta(%c%d, %c, %c) = {(%c", e.representacao, i, a.simbolos[j], ap.simbolos[k], e.representacao);
+				}
+				else
+					printf("delta(%c%d, %c, %c) = {(%c%d, ", e.representacao, i, a.simbolos[j], ap.simbolos[k], e.representacao, t->producoes[i][j][k-1]);
+				scanf("%d", &t->producoes[i][j][k]);
+			}
 		}
 	}
 }
@@ -57,7 +70,7 @@ Producao getProducao(Producao *producoes, int indice) {
 }
 
 void imprimirProducoes(Producao t, Alfabeto a, Estado e) {
-	int i, j;
+	int i, j, k;
 	for (i = 0; i < t.numEstados; i++) {
 		printf("\n |");
 		if (e.estados[i] == e.estadoInicial)
@@ -79,7 +92,9 @@ void imprimirProducoes(Producao t, Alfabeto a, Estado e) {
 			printf(" ");
 		printf("%c%d  ",e.representacao, i);
 		for (j = 0; j < a.numSimbolos; j++) {
-			printf(" | %c%d",e.representacao, t.producoes[i][j]);
+			for (k = 0; k < t.numSimbolosPilha; ++k) {
+				printf(" | %c%d",e.representacao, t.producoes[i][j][k]);
+			}
 		}
 		printf(" |");
 	}

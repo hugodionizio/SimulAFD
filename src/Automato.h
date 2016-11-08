@@ -16,17 +16,9 @@
 #include "Producao.h"
 
 // Estruturas de Dados
-# ifndef __cplusplus
-// Lógico
-enum bool {
-	false,
-	true
-};
-typedef enum bool bool;
-#endif
-
 struct Automato {
 	Alfabeto a;
+	Alfabeto ap;
 	Estado e; // Conjunto de Estados, Estado Inicial e Estados Finais
 	Producao t;
 	Fita f;

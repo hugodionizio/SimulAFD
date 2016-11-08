@@ -16,13 +16,13 @@ struct Producao {
 	int numSimbolosPilha;
 	int numEstados;
 
-	int **producoes;
+	int ***producoes;
 };
 typedef struct Producao Producao;
 
 void criarProducoes(Producao *, Estado, Alfabeto);
 void inicializarProducoes(Producao *);
-void definirProducoes(Producao *, Estado, Alfabeto);
+void definirProducoes(Producao *, Estado, Alfabeto, Alfabeto);
 void liberarProducoes(Producao *);
 Producao getProducao(Producao *, int);
 int buscaSequencial (int, int, int *);

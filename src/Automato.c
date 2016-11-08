@@ -17,7 +17,10 @@ void criarAutomato(Automato *aut) {
 
 	if (aut->e.numEstados > 0) {
 		// Definindo simbologia do Alfabeto
-		criarAlfabeto(&aut->a);
+		criarAlfabeto(&aut->a, false);
+
+		// Definindo simbologia do Alfabeto da pilha
+		criarAlfabeto(&aut->ap, true);
 
 		// Criação da Matriz de Produções
 		criarProducoes(&aut->t, aut->e, aut->a);
@@ -26,7 +29,7 @@ void criarAutomato(Automato *aut) {
 		inicializarProducoes(&aut->t);
 
 		// Construção do Autômatofor
-		definirProducoes(&aut->t, aut->e, aut->a);
+		definirProducoes(&aut->t, aut->e, aut->a, aut->ap);
 		selecionarEstadoInicialTerminal(&aut->e);
 		selecionarEstadosFinaisTerminal(&aut->e);
 	}
@@ -79,9 +82,10 @@ bool verificarSequencia(Automato *aut, char *seq) {
 	criarFita(&aut->f, seq);
 
 	for(s = 0; s < tam; s++) {
-		pos = buscaSequencialStr(seq[s], aut->a.numSimbolos, aut->a.simbolos);
+		pos = buscaSequencialStr(aut->f.seq[s], aut->a.numSimbolos, aut->a.simbolos);
 		if (pos < aut->a.numSimbolos) {
 			j = aut->t.producoes[j][pos];
+			executarPilha(&aut->p, j, aut->f.seq[s]);
 		}
 		else {
 			printf("Símbolo na sequência não encontrado.\n");

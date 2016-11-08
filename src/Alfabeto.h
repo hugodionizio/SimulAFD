@@ -8,6 +8,15 @@
 #ifndef SRC_ALFABETO_H_
 #define SRC_ALFABETO_H_
 
+# ifndef __cplusplus
+// Lógico
+enum bool {
+	false,
+	true
+};
+typedef enum bool bool;
+#endif
+
 struct Alfabeto {
 	int numSimbolos;
 
@@ -15,7 +24,7 @@ struct Alfabeto {
 };
 typedef struct Alfabeto Alfabeto;
 
-void criarAlfabeto(Alfabeto *);
+void criarAlfabeto(Alfabeto *, bool);
 void imprimirAlfabeto(Alfabeto);
 
 #endif /* SRC_ALFABETO_H_ */
