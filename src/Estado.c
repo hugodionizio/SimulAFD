@@ -49,6 +49,38 @@ void selecionarEstadosFinaisTerminal(Estado *e) {
 	}
 }
 
+void selecionarEstadosEmpilhar(Estado *e) {
+	int i;
+	printf("Insira a quantidade de estados que empilham do Autômato: ");
+	scanf("%d", &e->numEstadosEmpilhar);
+	e->estadosEmpilhar = (int *)malloc(e->numEstadosEmpilhar*sizeof(int));
+	for (i = 0; i < e->numEstadosEmpilhar; i++) {
+		if (e->numEstadosEmpilhar == 1) {
+			printf ("Insira o estado que empilha: %c", e->representacao);
+			scanf ("%d", &e->estadosEmpilhar[i]);
+		} else {
+			printf("Insira o %dº estado quem empilha: %c",i+1, e->representacao);
+			scanf("%d", &e->estadosEmpilhar[i]);
+		}
+	}
+}
+
+void selecionarEstadosDesempilhar(Estado *e) {
+	int i;
+	printf("Insira a quantidade de estados que desempilham do Autômato: ");
+	scanf("%d", &e->numEstadosDesempilhar);
+	e->estadosDesempilhar = (int *)malloc(e->numEstadosEmpilhar*sizeof(int));
+	for (i = 0; i < e->numEstadosDesempilhar; i++) {
+		if (e->numEstadosDesempilhar == 1) {
+			printf ("Insira o estado que desempilha: %c", e->representacao);
+			scanf ("%d", &e->estadosDesempilhar[i]);
+		} else {
+			printf("Insira o %dº estado que desempilha: %c",i+1, e->representacao);
+			scanf("%d", &e->estadosDesempilhar[i]);
+		}
+	}
+}
+
 void imprimirEstados(Estado e) {
 	int i;
 

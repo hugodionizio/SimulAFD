@@ -24,6 +24,5 @@ typedef struct Pilha {
 void empilhar(Pilha *, char);
 void desempilhar(Pilha *);
 CelulaPDA verTopo(Pilha);
-void executarPilha(Pilha *, char, char);
 
 #endif /* SRC_PILHA_H_ */

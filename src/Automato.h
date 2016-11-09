@@ -27,6 +27,7 @@ struct Automato {
 typedef struct Automato Automato;
 
 void criarAutomato(Automato *);
+void executarPilha(Automato *, int, char);
 bool verificarAutomato(Automato);
 bool verificarSequencia(Automato *, char *);
 void imprimirAutomato(Automato);

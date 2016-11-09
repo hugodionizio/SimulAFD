@@ -16,7 +16,7 @@ struct Producao {
 	int numSimbolosPilha;
 	int numEstados;
 
-	int ***transicoes;
+	int **funcoes;
 };
 typedef struct Producao Transicao;
 

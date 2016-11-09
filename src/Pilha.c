@@ -48,12 +48,3 @@ void desempilhar(Pilha *p) {
 CelulaPDA verTopo(Pilha p) {
 	return p.celula;
 }
-
-void executarPilha(Pilha *p, char estado, char producao) {
-	if(estado == 'e') {
-		desempilhar(p);
-	}
-	else {
-		empilhar(p, producao);
-	}
-}

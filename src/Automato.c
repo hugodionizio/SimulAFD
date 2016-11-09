@@ -28,15 +28,27 @@ void criarAutomato(Automato *aut) {
 		// Inicialização da Matriz
 		inicializarTransicoes(&aut->t);
 
-		// Construção do Autômatofor
-		definirTransicoes(&aut->t, aut->e, aut->a, aut->ap);
+		// Construção do Autômato
 		selecionarEstadoInicialTerminal(&aut->e);
 		selecionarEstadosFinaisTerminal(&aut->e);
+		selecionarEstadosEmpilhar(&aut->e);
+		selecionarEstadosDesempilhar(&aut->e);
+		definirTransicoes(&aut->t, aut->e, aut->a, aut->ap);
+	}
+}
+
+void executarPilha(Automato *aut, int estado, char simbolo) {
+	if(buscaSequencial(estado, aut->e.numEstadosDesempilhar, aut->e.estadosDesempilhar) < aut->e.numEstadosDesempilhar) {
+		if (simbolo == (verTopo(aut->p)).entrada)
+			desempilhar(&aut->p);
+	}
+	else if (buscaSequencial(estado, aut->e.numEstadosEmpilhar, aut->e.estadosEmpilhar) < aut->e.numEstadosEmpilhar) {
+		empilhar(&aut->p, simbolo);
 	}
 }
 
 bool verificarAutomato(Automato aut) {
-	int i, j, k, topo, count = 0;
+	int i, j, topo, count = 0;
 	int* estadosVerificados;
 	estadosVerificados = (int*) malloc(aut.e.numEstados * sizeof(int));
 	for (i = 0; i < aut.e.numEstados; ++i) {
@@ -48,17 +60,15 @@ bool verificarAutomato(Automato aut) {
 	while (topo < aut.e.numEstados
 			&& count < pow((double) 2, (double) aut.e.numEstados)) {
 		for (j = 0; j < aut.a.numSimbolos; ++j) {
-			for (k = 0; k < aut.ap.numSimbolos; ++k) {
-				if (aut.t.transicoes[i][j][k] != i) {
-					i = aut.t.transicoes[i][j][k];
-					if (buscaSequencial(i, aut.e.numEstados, estadosVerificados)
-							== aut.e.numEstados) {
-						estadosVerificados[topo + 1] = i;
-						topo++;
-					}
+			if (aut.t.funcoes[i][j] != i) {
+				i = aut.t.funcoes[i][j];
+				if (buscaSequencial(i, aut.e.numEstados, estadosVerificados)
+						== aut.e.numEstados) {
+					estadosVerificados[topo + 1] = i;
+					topo++;
 				}
-				count++;
 			}
+			count++;
 		}
 	}
 	if (topo < aut.e.numEstados) {
@@ -82,7 +92,7 @@ bool verificarSequencia(Automato *aut, char *seq) {
 	for(s = 0; s < tam; s++) {
 		pos = buscaSequencialStr(aut->f.seq[s], aut->a.numSimbolos, aut->a.simbolos);
 		if (pos < (int)aut->a.numSimbolos) {
-			j = aut->t.transicoes[0][j][pos];
+			j = aut->t.funcoes[j][pos];
 			executarPilha(&aut->p, j, aut->f.seq[s]);
 		}
 		else {

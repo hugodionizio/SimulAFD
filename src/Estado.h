@@ -16,8 +16,15 @@ struct Estado {
 
 	char representacao;
 	int estadoInicial;
+
 	int numEstadosFinais;
 	int *estadosFinais;
+
+	int numEstadosEmpilhar;
+	int *estadosEmpilhar;
+
+	int numEstadosDesempilhar;
+	int *estadosDesempilhar;
 };
 typedef struct Estado Estado;
 
@@ -25,6 +32,8 @@ void criarEstadoTerminal(Estado *);
 void inicializarEstado(Estado *);
 void selecionarEstadoInicialTerminal(Estado *);
 void selecionarEstadosFinaisTerminal(Estado *);
+void selecionarEstadosEmpilhar(Estado *);
+void selecionarEstadosDesempilhar(Estado *);
 void imprimirEstados(Estado e);
 void imprimirEstadoInicial(Estado e);
 void imprimirEstadosFinais(Estado e);

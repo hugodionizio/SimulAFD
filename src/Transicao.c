@@ -16,12 +16,9 @@ void criarTransicoes(Transicao *t, Estado e, Alfabeto a) {
 	t->numSimbolos = a.numSimbolos;
 	t->numSimbolosPilha = 3;
 
-	t->transicoes = (int ***)malloc(t->numEstados*sizeof(int));
-	for (i = 0; i < t->numEstados; i++) {
-		t->transicoes[i] = (int **)malloc(t->numSimbolos*sizeof(int));
-		for (j = 0; j < t->numSimbolos; j++)
-			t->transicoes[i][j] = (int *)malloc(t->numSimbolosPilha*sizeof(int));
-	}
+	t->funcoes = (int **)malloc(t->numEstados*sizeof(int));
+	for (i = 0; i < t->numEstados; i++)
+		t->funcoes[i] = (int *)malloc(t->numSimbolos*sizeof(int));
 }
 
 void inicializarTransicoes(Transicao *t) {
@@ -29,27 +26,19 @@ void inicializarTransicoes(Transicao *t) {
 
 	for (i = 0; i < t->numEstados; i++) {
 		for (j = 0; j < t->numSimbolos; j++) {
-			for (k = 0; k < t->numSimbolosPilha; ++k) {
-				t->transicoes[i][j][k] = -1;
-			}
+			t->funcoes[i][j] = -1;
 		}
 	}
 }
 
 void definirTransicoes(Transicao *t, Estado e, Alfabeto a, Alfabeto ap) {
-	int i, j, k;
+	int i, j;
 
 	printf("Insira as funções de transição do Autômato:\n");
 	for (i = 0; i < t->numEstados; i++) {
 		for (j = 0; j < t->numSimbolos; j++) {
-			for (k = 0; k < t->numSimbolosPilha; ++k) {
-				if (j == 0) {
-					printf("delta(%c%d, %c, %c) = {(%c", e.representacao, i, a.simbolos[j], ap.simbolos[k], e.representacao);
-				}
-				else
-					printf("delta(%c%d, %c, %c) = {(%c%d, ", e.representacao, i, a.simbolos[j], ap.simbolos[k], e.representacao, t->transicoes[i][j][k-1]);
-				scanf("%d", &t->transicoes[i][j][k]);
-			}
+			printf("delta(%c%d, %c) = %c",e.representacao, i, a.simbolos[j], e.representacao);
+			scanf("%d", &t->funcoes[j][i]);
 		}
 	}
 }
@@ -60,10 +49,10 @@ void liberarTransicoes(Transicao *t) {
 
 	//  Liberação da memória de cada linha
 	for (i = 0; i < t->numEstados; i++)
-		free(t->transicoes[i]);
+		free(t->funcoes[i]);
 
 	//  Liberação da matriz da memória principal
-	free(t->transicoes);
+	free(t->funcoes);
 }
 
 Transicao getTransicao(Transicao *producoes, int indice) {
@@ -93,9 +82,7 @@ void imprimirTransicoes(Transicao t, Alfabeto a, Estado e) {
 			printf(" ");
 		printf("%c%d  ",e.representacao, i);
 		for (j = 0; j < a.numSimbolos; j++) {
-			for (k = 0; k < t.numSimbolosPilha; ++k) {
-				printf(" | %c%d",e.representacao, t.transicoes[i][j][k]);
-			}
+			printf(" | %c%d",e.representacao, t.funcoes[i][j]);
 		}
 		printf(" |");
 	}
