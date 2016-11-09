@@ -23,50 +23,48 @@ void criarAutomato(Automato *aut) {
 		criarAlfabeto(&aut->ap, true);
 
 		// Criação da Matriz de Produções
-		criarProducoes(&aut->t, aut->e, aut->a);
+		criarTransicoes(&aut->t, aut->e, aut->a);
 
 		// Inicialização da Matriz
-		inicializarProducoes(&aut->t);
+		inicializarTransicoes(&aut->t);
 
 		// Construção do Autômatofor
-		definirProducoes(&aut->t, aut->e, aut->a, aut->ap);
+		definirTransicoes(&aut->t, aut->e, aut->a, aut->ap);
 		selecionarEstadoInicialTerminal(&aut->e);
 		selecionarEstadosFinaisTerminal(&aut->e);
 	}
 }
 
 bool verificarAutomato(Automato aut) {
-	int i, j, topo, count = 0;
-	int *estadosVerificados;
-
-	estadosVerificados = (int *)malloc(aut.e.numEstados*sizeof(int));
-
+	int i, j, k, topo, count = 0;
+	int* estadosVerificados;
+	estadosVerificados = (int*) malloc(aut.e.numEstados * sizeof(int));
 	for (i = 0; i < aut.e.numEstados; ++i) {
 		estadosVerificados[i] = -1;
 	}
-
 	estadosVerificados[0] = aut.e.estadoInicial;
 	topo = 0;
 	i = estadosVerificados[0];
-	while(topo < aut.e.numEstados && count < pow((double)2, (double)aut.e.numEstados)) {
+	while (topo < aut.e.numEstados
+			&& count < pow((double) 2, (double) aut.e.numEstados)) {
 		for (j = 0; j < aut.a.numSimbolos; ++j) {
-			if(aut.t.producoes[i][j] != i) {
-				i = aut.t.producoes[i][j];
-
-				if(buscaSequencial(i, aut.e.numEstados, estadosVerificados) == aut.e.numEstados) {
-					estadosVerificados[topo+1] = i;
-					topo++;
+			for (k = 0; k < aut.ap.numSimbolos; ++k) {
+				if (aut.t.transicoes[i][j][k] != i) {
+					i = aut.t.transicoes[i][j][k];
+					if (buscaSequencial(i, aut.e.numEstados, estadosVerificados)
+							== aut.e.numEstados) {
+						estadosVerificados[topo + 1] = i;
+						topo++;
+					}
 				}
+				count++;
 			}
-			count++;
 		}
 	}
-
 	if (topo < aut.e.numEstados) {
 		printf("O autômato é um PDA\n");
 		return true;
-	}
-	else {
+	} else {
 		printf("O autômato não é um PDA\n");
 		return false;
 	}
@@ -83,8 +81,8 @@ bool verificarSequencia(Automato *aut, char *seq) {
 
 	for(s = 0; s < tam; s++) {
 		pos = buscaSequencialStr(aut->f.seq[s], aut->a.numSimbolos, aut->a.simbolos);
-		if (pos < aut->a.numSimbolos) {
-			j = aut->t.producoes[j][pos];
+		if (pos < (int)aut->a.numSimbolos) {
+			j = aut->t.transicoes[0][j][pos];
 			executarPilha(&aut->p, j, aut->f.seq[s]);
 		}
 		else {
@@ -123,7 +121,7 @@ void imprimirAutomato(Automato aut) {
 	printf(" |");
 
 	//  Funções de transição
-	imprimirProducoes(aut.t, aut.a, aut.e);
+	imprimirTransicoes(aut.t, aut.a, aut.e);
 
 	//  Estados Inicial e Finais
 	imprimirEstadoInicial(aut.e);

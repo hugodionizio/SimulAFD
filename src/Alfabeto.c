@@ -17,7 +17,7 @@ void criarAlfabeto(Alfabeto *a, bool pilha) {
 	a->simbolos = (char *)malloc(a->numSimbolos*sizeof(char));
 	if(!pilha) {
 		a->simbolos[0] = 'e';
-		strcpy(daPilha, ": q");
+		strcpy(daPilha, ": ");
 	}
 	else {
 		a->simbolos[0] = 'Z';

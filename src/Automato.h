@@ -13,14 +13,14 @@
 #include "Estado.h"
 #include "Pilha.h"
 #include "Fita.h"
-#include "Producao.h"
+#include "Transicao.h"
 
 // Estruturas de Dados
 struct Automato {
 	Alfabeto a;
 	Alfabeto ap;
 	Estado e; // Conjunto de Estados, Estado Inicial e Estados Finais
-	Producao t;
+	Transicao t;
 	Fita f;
 	Pilha p;
 };

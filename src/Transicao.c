@@ -1,44 +1,45 @@
 /*
- * Producao.c
+ * Transicao.c
  *
  *  Created on: 13/03/2016
  *      Author: hugo
  */
 
+#include "Transicao.h"
+
 #include <stdio.h>
 #include <stdlib.h>
-#include "Producao.h"
 
-void criarProducoes(Producao *t, Estado e, Alfabeto a) {
+void criarTransicoes(Transicao *t, Estado e, Alfabeto a) {
 	int i, j;
 	t->numEstados = e.numEstados;
 	t->numSimbolos = a.numSimbolos;
 	t->numSimbolosPilha = 3;
 
-	t->producoes = (int ***)malloc(t->numEstados*sizeof(int));
+	t->transicoes = (int ***)malloc(t->numEstados*sizeof(int));
 	for (i = 0; i < t->numEstados; i++) {
-		t->producoes[i] = (int **)malloc(t->numSimbolos*sizeof(int));
+		t->transicoes[i] = (int **)malloc(t->numSimbolos*sizeof(int));
 		for (j = 0; j < t->numSimbolos; j++)
-			t->producoes[i][j] = (int *)malloc(t->numSimbolosPilha*sizeof(int));
+			t->transicoes[i][j] = (int *)malloc(t->numSimbolosPilha*sizeof(int));
 	}
 }
 
-void inicializarProducoes(Producao *t) {
+void inicializarTransicoes(Transicao *t) {
 	int i, j, k;
 
 	for (i = 0; i < t->numEstados; i++) {
 		for (j = 0; j < t->numSimbolos; j++) {
 			for (k = 0; k < t->numSimbolosPilha; ++k) {
-				t->producoes[i][j][k] = -1;
+				t->transicoes[i][j][k] = -1;
 			}
 		}
 	}
 }
 
-void definirProducoes(Producao *t, Estado e, Alfabeto a, Alfabeto ap) {
+void definirTransicoes(Transicao *t, Estado e, Alfabeto a, Alfabeto ap) {
 	int i, j, k;
 
-	printf("Insira as produções do Autômato:\n");
+	printf("Insira as funções de transição do Autômato:\n");
 	for (i = 0; i < t->numEstados; i++) {
 		for (j = 0; j < t->numSimbolos; j++) {
 			for (k = 0; k < t->numSimbolosPilha; ++k) {
@@ -46,30 +47,30 @@ void definirProducoes(Producao *t, Estado e, Alfabeto a, Alfabeto ap) {
 					printf("delta(%c%d, %c, %c) = {(%c", e.representacao, i, a.simbolos[j], ap.simbolos[k], e.representacao);
 				}
 				else
-					printf("delta(%c%d, %c, %c) = {(%c%d, ", e.representacao, i, a.simbolos[j], ap.simbolos[k], e.representacao, t->producoes[i][j][k-1]);
-				scanf("%d", &t->producoes[i][j][k]);
+					printf("delta(%c%d, %c, %c) = {(%c%d, ", e.representacao, i, a.simbolos[j], ap.simbolos[k], e.representacao, t->transicoes[i][j][k-1]);
+				scanf("%d", &t->transicoes[i][j][k]);
 			}
 		}
 	}
 }
 
 // Liberar Funções da Memória Principal
-void liberarProducoes(Producao *t) {
+void liberarTransicoes(Transicao *t) {
 	int i;
 
 	//  Liberação da memória de cada linha
 	for (i = 0; i < t->numEstados; i++)
-		free(t->producoes[i]);
+		free(t->transicoes[i]);
 
 	//  Liberação da matriz da memória principal
-	free(t->producoes);
+	free(t->transicoes);
 }
 
-Producao getProducao(Producao *producoes, int indice) {
+Transicao getTransicao(Transicao *producoes, int indice) {
 	return producoes[indice];
 }
 
-void imprimirProducoes(Producao t, Alfabeto a, Estado e) {
+void imprimirTransicoes(Transicao t, Alfabeto a, Estado e) {
 	int i, j, k;
 	for (i = 0; i < t.numEstados; i++) {
 		printf("\n |");
@@ -93,7 +94,7 @@ void imprimirProducoes(Producao t, Alfabeto a, Estado e) {
 		printf("%c%d  ",e.representacao, i);
 		for (j = 0; j < a.numSimbolos; j++) {
 			for (k = 0; k < t.numSimbolosPilha; ++k) {
-				printf(" | %c%d",e.representacao, t.producoes[i][j][k]);
+				printf(" | %c%d",e.representacao, t.transicoes[i][j][k]);
 			}
 		}
 		printf(" |");
