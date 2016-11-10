@@ -88,9 +88,12 @@ bool verificarSequencia(Automato *aut, char *seq) {
 
 	int j = aut->e.estadoInicial, s, pos;
 	int tam = strlen(seq);
+	bool metade = false;
+	char aux;
 
 	// Testando percurso até primeiro estado de aceitação
-	pos = buscaSequencialStr('e', aut->a.numSimbolos, aut->a.simbolos);
+	aux = 'e';
+	pos = buscaSequencialStr(aux, aut->a.numSimbolos, aut->a.simbolos);
 	for(s = 0; s < aut->e.numEstados; s++) {
 		j = aut->t.funcoes[j][pos];
 		if (buscaSequencial(j, aut->e.numEstadosFinais, aut->e.estadosFinais) < aut->e.numEstadosFinais) {
@@ -105,10 +108,17 @@ bool verificarSequencia(Automato *aut, char *seq) {
 		j = aut->e.estadoInicial;
 		// Verificando subcadeias
 		for(s = 0; s < tam; s++) {
-			pos = buscaSequencialStr(aut->f.seq[s], aut->a.numSimbolos, aut->a.simbolos);
+			if (s > 0 && s >= (int)(float)(tam/2) && !metade) {
+				aux = 'e';
+				metade = true;
+				s--;
+			}
+			else
+				aux = aut->f.seq[s];
+			pos = buscaSequencialStr(aux, aut->a.numSimbolos, aut->a.simbolos);
 			if (pos < (int)aut->a.numSimbolos) {
 				j = aut->t.funcoes[j][pos];
-				executarPilha(aut, j, aut->f.seq[s]);
+				executarPilha(aut, j, aux);
 			}
 			else {
 				printf("Símbolo na sequência não encontrado.\n");
