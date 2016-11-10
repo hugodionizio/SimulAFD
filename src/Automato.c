@@ -85,39 +85,49 @@ bool verificarAutomato(Automato aut) {
 
 bool verificarSequencia(Automato *aut, char *seq) {
 	bool result = false;
-	CelulaPDA *aux;
 
 	int j = aut->e.estadoInicial, s, pos;
 	int tam = strlen(seq);
 
-	criarFita(&aut->f, seq);
-
+	// Testando percurso até primeiro estado de aceitação
+	pos = buscaSequencialStr('e', aut->a.numSimbolos, aut->a.simbolos);
 	for(s = 0; s < tam; s++) {
-		pos = buscaSequencialStr(aut->f.seq[s], aut->a.numSimbolos, aut->a.simbolos);
-		if (pos < (int)aut->a.numSimbolos) {
-			j = aut->t.funcoes[j][pos];
-			executarPilha(aut, j, aut->f.seq[s]);
+		j = aut->t.funcoes[j][pos];
+		if (buscaSequencial(j, aut->e.numEstadosFinais, aut->e.estadosFinais) < aut->e.numEstadosFinais) {
+			result = true;
+			s = tam;
+		}
+	}
+
+	if (result == true) {
+		criarFita(&aut->f, seq);
+
+		// Verificando subcadeias
+		for(s = 0; s < tam; s++) {
+			pos = buscaSequencialStr(aut->f.seq[s], aut->a.numSimbolos, aut->a.simbolos);
+			if (pos < (int)aut->a.numSimbolos) {
+				j = aut->t.funcoes[j][pos];
+				executarPilha(aut, j, aut->f.seq[s]);
+			}
+			else {
+				printf("Símbolo na sequência não encontrado.\n");
+				j = -1;
+				s = tam;
+			}
+		}
+
+		if (buscaSequencial(j, aut->e.numEstadosFinais, aut->e.estadosFinais) < aut->e.numEstadosFinais ||
+				aut->p.topo == 0) {
+			printf("Essa sequência pertence ao AFD.\n");
+			result = true;
 		}
 		else {
-			printf("Símbolo na sequência não encontrado.\n");
-			j = -1;
-			break;
+			printf("Essa sequência não pertence ao AFD.\n");
+			result = false;
 		}
-	}
 
-	aux = (CelulaPDA *)malloc(sizeof(CelulaPDA *));
-	*aux = verTopo(aut->p);
-	if (buscaSequencial(j, aut->e.numEstadosFinais, aut->e.estadosFinais) < aut->e.numEstadosFinais ||
-			aut->p.topo == 0) {
-		printf("Essa sequência pertence ao AFD.\n");
-		result = true;
+		esvaziarPilha(&aut->p);
 	}
-	else {
-		printf("Essa sequência não pertence ao AFD.\n");
-		result = false;
-	}
-
-	esvaziarPilha(&aut->p);
 
 	return result;
 }
