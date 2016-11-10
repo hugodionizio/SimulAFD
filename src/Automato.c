@@ -91,17 +91,18 @@ bool verificarSequencia(Automato *aut, char *seq) {
 
 	// Testando percurso até primeiro estado de aceitação
 	pos = buscaSequencialStr('e', aut->a.numSimbolos, aut->a.simbolos);
-	for(s = 0; s < tam; s++) {
+	for(s = 0; s < aut->e.numEstados; s++) {
 		j = aut->t.funcoes[j][pos];
 		if (buscaSequencial(j, aut->e.numEstadosFinais, aut->e.estadosFinais) < aut->e.numEstadosFinais) {
 			result = true;
-			s = tam;
+			s = aut->e.numEstados;
 		}
 	}
 
 	if (result == true) {
 		criarFita(&aut->f, seq);
 
+		j = aut->e.estadoInicial;
 		// Verificando subcadeias
 		for(s = 0; s < tam; s++) {
 			pos = buscaSequencialStr(aut->f.seq[s], aut->a.numSimbolos, aut->a.simbolos);
