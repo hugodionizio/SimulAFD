@@ -6,8 +6,14 @@
  *				Hugo Dionizio Santos
  */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include "Pilha.h"
+
+void criarPilha(Pilha *p) {
+	p->topo = 0;
+	p->celula = *(CelulaPDA *)malloc(sizeof(CelulaPDA));
+}
 
 void empilhar(Pilha *p, char entrada) {
 	CelulaPDA *celula, *aux;
@@ -43,6 +49,11 @@ void desempilhar(Pilha *p) {
 	else {
 		printf("Pilha vazia.");
 	}
+}
+
+void esvaziarPilha(Pilha *p) {
+	while(p->topo > 0)
+		desempilhar(p);
 }
 
 CelulaPDA verTopo(Pilha p) {

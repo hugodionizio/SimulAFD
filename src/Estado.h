@@ -35,7 +35,9 @@ void selecionarEstadosFinaisTerminal(Estado *);
 void selecionarEstadosEmpilhar(Estado *);
 void selecionarEstadosDesempilhar(Estado *);
 void imprimirEstados(Estado e);
-void imprimirEstadoInicial(Estado e);
-void imprimirEstadosFinais(Estado e);
+void imprimirEstadoInicial(Estado);
+void imprimirEstadosFinais(Estado);
+void imprimirEstadosEmpilham(Estado);
+void imprimirEstadosDesempilham(Estado);
 
 #endif /* SRC_ESTADO_H_ */

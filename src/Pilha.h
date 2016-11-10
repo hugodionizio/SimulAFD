@@ -21,8 +21,10 @@ typedef struct Pilha {
 	CelulaPDA celula;
 } Pilha;
 
+void criarPilha(Pilha *);
 void empilhar(Pilha *, char);
 void desempilhar(Pilha *);
+void esvaziarPilha(Pilha *);
 CelulaPDA verTopo(Pilha);
 
 #endif /* SRC_PILHA_H_ */

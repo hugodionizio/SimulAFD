@@ -11,7 +11,7 @@
 #include <stdlib.h>
 
 void criarTransicoes(Transicao *t, Estado e, Alfabeto a) {
-	int i, j;
+	int i;
 	t->numEstados = e.numEstados;
 	t->numSimbolos = a.numSimbolos;
 	t->numSimbolosPilha = 3;
@@ -22,7 +22,7 @@ void criarTransicoes(Transicao *t, Estado e, Alfabeto a) {
 }
 
 void inicializarTransicoes(Transicao *t) {
-	int i, j, k;
+	int i, j;
 
 	for (i = 0; i < t->numEstados; i++) {
 		for (j = 0; j < t->numSimbolos; j++) {
@@ -37,8 +37,13 @@ void definirTransicoes(Transicao *t, Estado e, Alfabeto a, Alfabeto ap) {
 	printf("Insira as funções de transição do Autômato:\n");
 	for (i = 0; i < t->numEstados; i++) {
 		for (j = 0; j < t->numSimbolos; j++) {
-			printf("delta(%c%d, %c) = %c",e.representacao, i, a.simbolos[j], e.representacao);
-			scanf("%d", &t->funcoes[j][i]);
+			if (buscaSequencial(i, e.numEstadosDesempilhar, e.estadosDesempilhar) < e.numEstadosDesempilhar || buscaSequencial(i, e.numEstadosEmpilhar, e.estadosEmpilhar) < e.numEstadosEmpilhar) {
+				printf("delta(%c%d, %c) = %c",e.representacao, i, a.simbolos[j], e.representacao);
+				scanf("%d", &t->funcoes[i][j]);
+			}
+			else {
+				t->funcoes[i][j] = i;
+			}
 		}
 	}
 }
@@ -60,7 +65,7 @@ Transicao getTransicao(Transicao *producoes, int indice) {
 }
 
 void imprimirTransicoes(Transicao t, Alfabeto a, Estado e) {
-	int i, j, k;
+	int i, j;
 	for (i = 0; i < t.numEstados; i++) {
 		printf("\n |");
 		if (e.estados[i] == e.estadoInicial)

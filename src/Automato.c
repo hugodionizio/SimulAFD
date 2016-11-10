@@ -31,6 +31,7 @@ void criarAutomato(Automato *aut) {
 		// Construção do Autômato
 		selecionarEstadoInicialTerminal(&aut->e);
 		selecionarEstadosFinaisTerminal(&aut->e);
+		criarPilha(&aut->p);
 		selecionarEstadosEmpilhar(&aut->e);
 		selecionarEstadosDesempilhar(&aut->e);
 		definirTransicoes(&aut->t, aut->e, aut->a, aut->ap);
@@ -38,12 +39,14 @@ void criarAutomato(Automato *aut) {
 }
 
 void executarPilha(Automato *aut, int estado, char simbolo) {
-	if(buscaSequencial(estado, aut->e.numEstadosDesempilhar, aut->e.estadosDesempilhar) < aut->e.numEstadosDesempilhar) {
-		if (simbolo == (verTopo(aut->p)).entrada)
-			desempilhar(&aut->p);
-	}
-	else if (buscaSequencial(estado, aut->e.numEstadosEmpilhar, aut->e.estadosEmpilhar) < aut->e.numEstadosEmpilhar) {
-		empilhar(&aut->p, simbolo);
+	if (simbolo != 'e') {
+		if(buscaSequencial(estado, aut->e.numEstadosDesempilhar, aut->e.estadosDesempilhar) < aut->e.numEstadosDesempilhar) {
+			if (simbolo == (verTopo(aut->p)).entrada)
+				desempilhar(&aut->p);
+		}
+		else if (buscaSequencial(estado, aut->e.numEstadosEmpilhar, aut->e.estadosEmpilhar) < aut->e.numEstadosEmpilhar) {
+			empilhar(&aut->p, simbolo);
+		}
 	}
 }
 
@@ -93,7 +96,7 @@ bool verificarSequencia(Automato *aut, char *seq) {
 		pos = buscaSequencialStr(aut->f.seq[s], aut->a.numSimbolos, aut->a.simbolos);
 		if (pos < (int)aut->a.numSimbolos) {
 			j = aut->t.funcoes[j][pos];
-			executarPilha(&aut->p, j, aut->f.seq[s]);
+			executarPilha(aut, j, aut->f.seq[s]);
 		}
 		else {
 			printf("Símbolo na sequência não encontrado.\n");
@@ -102,15 +105,10 @@ bool verificarSequencia(Automato *aut, char *seq) {
 		}
 	}
 
-/*
-	for (i = 0; i < tam; ++i) {
-		j = aut.t.funcoes[j][seq[i]];
-	}
-*/
 	aux = (CelulaPDA *)malloc(sizeof(CelulaPDA *));
 	*aux = verTopo(aut->p);
 	if (buscaSequencial(j, aut->e.numEstadosFinais, aut->e.estadosFinais) < aut->e.numEstadosFinais ||
-			aux == NULL) {
+			aut->p.topo == 0) {
 		printf("Essa sequência pertence ao AFD.\n");
 		result = true;
 	}
@@ -118,6 +116,8 @@ bool verificarSequencia(Automato *aut, char *seq) {
 		printf("Essa sequência não pertence ao AFD.\n");
 		result = false;
 	}
+
+	esvaziarPilha(&aut->p);
 
 	return result;
 }
@@ -136,4 +136,8 @@ void imprimirAutomato(Automato aut) {
 	//  Estados Inicial e Finais
 	imprimirEstadoInicial(aut.e);
 	imprimirEstadosFinais(aut.e);
+
+	// Estados que Empilham e que Desempilham
+	imprimirEstadosEmpilham(aut.e);
+	imprimirEstadosDesempilham(aut.e);
 }

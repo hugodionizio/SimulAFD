@@ -106,3 +106,29 @@ void imprimirEstadosFinais(Estado e) {
 	//		printf("| Estado(s) de aceitação");
 	printf("}.\n");
 }
+
+void imprimirEstadosEmpilham(Estado e) {
+
+	int i;
+
+	printf("Empilhar = {");
+	for (i = 0; i < e.numEstadosEmpilhar; i++) {
+		printf("%d", e.estadosEmpilhar[i]);
+		if(i+1 < e.numEstadosEmpilhar)
+			printf(", ");
+	}
+	printf("}.\n");
+}
+
+void imprimirEstadosDesempilham(Estado e) {
+
+	int i;
+
+	printf("Desempilhar = {");
+	for (i = 0; i < e.numEstadosDesempilhar; i++) {
+		printf("%d", e.estadosDesempilhar[i]);
+		if(i+1 < e.numEstadosDesempilhar)
+			printf(", ");
+	}
+	printf("}.\n");
+}
